@@ -42,6 +42,7 @@ const AddDropOffPoint = () => {
     defaultValues: {
       title: "",
       description: "",
+      address: "",
     },
   })
 
@@ -111,6 +112,19 @@ const AddDropOffPoint = () => {
                   id="description"
                   {...register("description")}
                   placeholder="Description"
+                  type="text"
+                />
+              </Field>
+
+              <Field
+                invalid={!!errors.address}
+                errorText={errors.address?.message}
+                label="Address"
+              >
+                <Input
+                  id="address"
+                  {...register("address")}
+                  placeholder="Address"
                   type="text"
                 />
               </Field>

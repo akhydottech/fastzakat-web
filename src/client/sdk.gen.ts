@@ -44,6 +44,7 @@ import type {
   UtilsTestEmailData,
   UtilsTestEmailResponse,
   UtilsHealthCheckResponse,
+  AddressGetAddressData,
 } from "./types.gen"
 
 export class DropOffPointsService {
@@ -518,6 +519,20 @@ export class UtilsService {
     return __request(OpenAPI, {
       method: "GET",
       url: "/api/v1/utils/health-check/",
+    })
+  }
+}
+
+export class AddressService {
+  public static getAddress(
+    data: AddressGetAddressData,
+  ): CancelablePromise<any> {
+    return __request(OpenAPI, {
+      method: "GET",
+      url: "/api/v1/address/",
+      query: {
+        query: data.query,
+      },
     })
   }
 }
