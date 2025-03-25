@@ -11,9 +11,9 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router"
 import { FiSearch } from "react-icons/fi"
 import { z } from "zod"
 
-import { ItemsService } from "@/client"
+import { DropOffPointsService } from "@/client"
 import { ItemActionsMenu } from "@/components/Common/ItemActionsMenu"
-import AddItem from "@/components/Items/AddItem"
+import AddDropOffPoint from "@/components/drop-off-points/AddDropOffPoint"
 import PendingItems from "@/components/Pending/PendingItems"
 import {
   PaginationItems,
@@ -31,12 +31,12 @@ const PER_PAGE = 5
 function getItemsQueryOptions({ page }: { page: number }) {
   return {
     queryFn: () =>
-      ItemsService.readItems({ skip: (page - 1) * PER_PAGE, limit: PER_PAGE }),
+      DropOffPointsService.readDropOffPoints({ skip: (page - 1) * PER_PAGE, limit: PER_PAGE }),
     queryKey: ["items", { page }],
   }
 }
 
-export const Route = createFileRoute("/_layout/items")({
+export const Route = createFileRoute("/_layout/drop-off-points")({
   component: Items,
   validateSearch: (search) => itemsSearchSchema.parse(search),
 })
@@ -70,9 +70,9 @@ function ItemsTable() {
             <FiSearch />
           </EmptyState.Indicator>
           <VStack textAlign="center">
-            <EmptyState.Title>You don't have any items yet</EmptyState.Title>
+            <EmptyState.Title>You don't have any drop off points yet</EmptyState.Title>
             <EmptyState.Description>
-              Add a new item to get started
+              Add a new drop off point to get started
             </EmptyState.Description>
           </VStack>
         </EmptyState.Content>
@@ -135,9 +135,9 @@ function Items() {
   return (
     <Container maxW="full">
       <Heading size="lg" pt={12}>
-        Items Management
+        Drop Off Points Management
       </Heading>
-      <AddItem />
+      <AddDropOffPoint />
       <ItemsTable />
     </Container>
   )

@@ -12,7 +12,7 @@ import {
 import { useState } from "react"
 import { FaPlus } from "react-icons/fa"
 
-import { type ItemCreate, ItemsService } from "@/client"
+import { type DropOffPointCreate, DropOffPointsService } from "@/client"
 import type { ApiError } from "@/client/core/ApiError"
 import useCustomToast from "@/hooks/useCustomToast"
 import { handleError } from "@/utils"
@@ -27,7 +27,7 @@ import {
 } from "../ui/dialog"
 import { Field } from "../ui/field"
 
-const AddItem = () => {
+const AddDropOffPoint = () => {
   const [isOpen, setIsOpen] = useState(false)
   const queryClient = useQueryClient()
   const { showSuccessToast } = useCustomToast()
@@ -36,7 +36,7 @@ const AddItem = () => {
     handleSubmit,
     reset,
     formState: { errors, isValid, isSubmitting },
-  } = useForm<ItemCreate>({
+  } = useForm<DropOffPointCreate>({
     mode: "onBlur",
     criteriaMode: "all",
     defaultValues: {
@@ -46,10 +46,10 @@ const AddItem = () => {
   })
 
   const mutation = useMutation({
-    mutationFn: (data: ItemCreate) =>
-      ItemsService.createItem({ requestBody: data }),
+    mutationFn: (data: DropOffPointCreate) =>
+      DropOffPointsService.createDropOffPoint({ requestBody: data }),
     onSuccess: () => {
-      showSuccessToast("Item created successfully.")
+      showSuccessToast("Drop off point created successfully.")
       reset()
       setIsOpen(false)
     },
@@ -61,7 +61,7 @@ const AddItem = () => {
     },
   })
 
-  const onSubmit: SubmitHandler<ItemCreate> = (data) => {
+  const onSubmit: SubmitHandler<DropOffPointCreate> = (data) => {
     mutation.mutate(data)
   }
 
@@ -73,18 +73,18 @@ const AddItem = () => {
       onOpenChange={({ open }) => setIsOpen(open)}
     >
       <DialogTrigger asChild>
-        <Button value="add-item" my={4}>
+        <Button value="add-drop-off-point" my={4}>
           <FaPlus fontSize="16px" />
-          Add Item
+          Add Drop Off Point
         </Button>
       </DialogTrigger>
       <DialogContent>
         <form onSubmit={handleSubmit(onSubmit)}>
           <DialogHeader>
-            <DialogTitle>Add Item</DialogTitle>
+            <DialogTitle>Add Drop Off Point</DialogTitle>
           </DialogHeader>
           <DialogBody>
-            <Text mb={4}>Fill in the details to add a new item.</Text>
+            <Text mb={4}>Fill in the details to add a new drop off point.</Text>
             <VStack gap={4}>
               <Field
                 required
@@ -143,4 +143,4 @@ const AddItem = () => {
   )
 }
 
-export default AddItem
+export default AddDropOffPoint

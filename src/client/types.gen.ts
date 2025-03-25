@@ -13,24 +13,24 @@ export type HTTPValidationError = {
   detail?: Array<ValidationError>
 }
 
-export type ItemCreate = {
+export type DropOffPointCreate = {
   title: string
   description?: string | null
 }
 
-export type ItemPublic = {
+export type DropOffPointPublic = {
   title: string
   description?: string | null
   id: string
   owner_id: string
 }
 
-export type ItemsPublic = {
-  data: Array<ItemPublic>
+export type DropOffPointsPublic = {
+  data: Array<DropOffPointPublic>
   count: number
 }
 
-export type ItemUpdate = {
+export type DropOffPointUpdate = {
   title?: string | null
   description?: string | null
 }
@@ -100,37 +100,37 @@ export type ValidationError = {
   type: string
 }
 
-export type ItemsReadItemsData = {
+export type DropOffPointsReadItemsData = {
   limit?: number
   skip?: number
 }
 
-export type ItemsReadItemsResponse = ItemsPublic
+export type DropOffPointsReadItemsResponse = DropOffPointsPublic
 
-export type ItemsCreateItemData = {
-  requestBody: ItemCreate
+export type DropOffPointsCreateItemData = {
+  requestBody: DropOffPointCreate
 }
 
-export type ItemsCreateItemResponse = ItemPublic
+export type DropOffPointsCreateItemResponse = DropOffPointPublic
 
-export type ItemsReadItemData = {
+export type DropOffPointsReadItemData = {
   id: string
 }
 
-export type ItemsReadItemResponse = ItemPublic
+export type DropOffPointsReadItemResponse = DropOffPointPublic
 
-export type ItemsUpdateItemData = {
+export type DropOffPointsUpdateItemData = {
   id: string
-  requestBody: ItemUpdate
+  requestBody: DropOffPointUpdate
 }
 
-export type ItemsUpdateItemResponse = ItemPublic
+export type DropOffPointsUpdateItemResponse = DropOffPointPublic
 
-export type ItemsDeleteItemData = {
+export type DropOffPointsDeleteItemData = {
   id: string
 }
 
-export type ItemsDeleteItemResponse = Message
+export type DropOffPointsDeleteItemResponse = Message
 
 export type LoginLoginAccessTokenData = {
   formData: Body_login_login_access_token

@@ -69,7 +69,7 @@ export const HTTPValidationErrorSchema = {
   title: "HTTPValidationError",
 } as const
 
-export const ItemCreateSchema = {
+export const DropOffPointCreateSchema = {
   properties: {
     title: {
       type: "string",
@@ -92,10 +92,10 @@ export const ItemCreateSchema = {
   },
   type: "object",
   required: ["title"],
-  title: "ItemCreate",
+  title: "DropOffPointCreate",
 } as const
 
-export const ItemPublicSchema = {
+export const DropOffPointPublicSchema = {
   properties: {
     title: {
       type: "string",
@@ -128,10 +128,10 @@ export const ItemPublicSchema = {
   },
   type: "object",
   required: ["title", "id", "owner_id"],
-  title: "ItemPublic",
+  title: "DropOffPointPublic",
 } as const
 
-export const ItemUpdateSchema = {
+export const DropOffPointUpdateSchema = {
   properties: {
     title: {
       anyOf: [
@@ -160,14 +160,14 @@ export const ItemUpdateSchema = {
     },
   },
   type: "object",
-  title: "ItemUpdate",
+  title: "DropOffPointUpdate",
 } as const
 
-export const ItemsPublicSchema = {
+export const DropOffPointsPublicSchema = {
   properties: {
     data: {
       items: {
-        $ref: "#/components/schemas/ItemPublic",
+        $ref: "#/components/schemas/DropOffPointPublic",
       },
       type: "array",
       title: "Data",
@@ -179,7 +179,7 @@ export const ItemsPublicSchema = {
   },
   type: "object",
   required: ["data", "count"],
-  title: "ItemsPublic",
+  title: "DropOffPointsPublic",
 } as const
 
 export const MessageSchema = {

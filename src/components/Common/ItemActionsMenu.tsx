@@ -2,12 +2,12 @@ import { IconButton } from "@chakra-ui/react"
 import { BsThreeDotsVertical } from "react-icons/bs"
 import { MenuContent, MenuRoot, MenuTrigger } from "../ui/menu"
 
-import type { ItemPublic } from "@/client"
-import DeleteItem from "../Items/DeleteItem"
-import EditItem from "../Items/EditItem"
+import type { DropOffPointPublic } from "@/client"
+import DeleteDropOffPoint from "../drop-off-points/DeleteDropOffPoint"
+import EditDropOffPoint from "../drop-off-points/EditDropOffPoint"
 
 interface ItemActionsMenuProps {
-  item: ItemPublic
+  item: DropOffPointPublic
 }
 
 export const ItemActionsMenu = ({ item }: ItemActionsMenuProps) => {
@@ -19,8 +19,8 @@ export const ItemActionsMenu = ({ item }: ItemActionsMenuProps) => {
         </IconButton>
       </MenuTrigger>
       <MenuContent>
-        <EditItem item={item} />
-        <DeleteItem id={item.id} />
+        <EditDropOffPoint item={item} />
+        <DeleteDropOffPoint id={item.id} />
       </MenuContent>
     </MenuRoot>
   )
