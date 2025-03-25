@@ -16,12 +16,14 @@ export type HTTPValidationError = {
 export type DropOffPointCreate = {
   title: string
   description?: string | null
+  address?: string | null
 }
 
 export type DropOffPointPublic = {
   title: string
   description?: string | null
   id: string
+  address?: string | null
   owner_id: string
   owner_full_name?: string | null
 }
@@ -34,6 +36,7 @@ export type DropOffPointsPublic = {
 export type DropOffPointUpdate = {
   title?: string | null
   description?: string | null
+  address?: string | null
 }
 
 export type Message = {
@@ -220,3 +223,46 @@ export type UtilsTestEmailData = {
 export type UtilsTestEmailResponse = Message
 
 export type UtilsHealthCheckResponse = boolean
+
+export type AddressGetAddressData = {
+  query: string
+}
+export type AddressFeatureProperties = {
+  label: string
+  score: number
+  housenumber?: string
+  id: string
+  banId?: string
+  name: string
+  postcode: string
+  citycode: string
+  x: number
+  y: number
+  city: string
+  district?: string
+  context: string
+  type: string
+  importance: number
+  street: string
+}
+
+export type AddressFeatureGeometry = {
+  type: string
+  coordinates: [number, number]
+}
+
+export type AddressFeature = {
+  type: string
+  geometry: AddressFeatureGeometry
+  properties: AddressFeatureProperties
+}
+
+export type AddressGetAddressResponse = {
+  type: string
+  version: string
+  features: AddressFeature[]
+  attribution: string
+  licence: string
+  query: string
+  limit: number
+}

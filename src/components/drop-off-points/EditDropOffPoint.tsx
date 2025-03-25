@@ -7,7 +7,7 @@ import {
   VStack,
 } from "@chakra-ui/react"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { type SubmitHandler, useForm } from "react-hook-form"
 import { FaExchangeAlt } from "react-icons/fa"
 
@@ -33,6 +33,7 @@ interface EditDropOffPointProps {
 interface DropOffPointUpdateForm {
   title: string
   description?: string
+  address?: string
 }
 
 const EditDropOffPoint = ({ item }: EditDropOffPointProps) => {
@@ -50,8 +51,17 @@ const EditDropOffPoint = ({ item }: EditDropOffPointProps) => {
     defaultValues: {
       ...item,
       description: item.description ?? undefined,
+      address: item.address ?? undefined,
     },
   })
+
+  useEffect(() => {
+    reset({
+      ...item,
+      description: item.description ?? undefined,
+      address: item.address ?? undefined,
+    })
+  }, [item, reset])
 
   const mutation = useMutation({
     mutationFn: (data: DropOffPointUpdateForm) =>
@@ -119,6 +129,19 @@ const EditDropOffPoint = ({ item }: EditDropOffPointProps) => {
                   id="description"
                   {...register("description")}
                   placeholder="Description"
+                  type="text"
+                />
+              </Field>
+
+              <Field
+                invalid={!!errors.address}
+                errorText={errors.address?.message}
+                label="Address"
+              >
+                <Input
+                  id="address"
+                  {...register("address")}
+                  placeholder="Address"
                   type="text"
                 />
               </Field>
