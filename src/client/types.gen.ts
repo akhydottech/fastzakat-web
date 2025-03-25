@@ -23,6 +23,7 @@ export type DropOffPointPublic = {
   description?: string | null
   id: string
   owner_id: string
+  owner_full_name?: string | null
 }
 
 export type DropOffPointsPublic = {
