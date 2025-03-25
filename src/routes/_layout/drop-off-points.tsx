@@ -85,6 +85,7 @@ function ItemsTable() {
       <Table.Root size={{ base: "sm", md: "md" }}>
         <Table.Header>
           <Table.Row>
+            <Table.ColumnHeader w="sm">Owner</Table.ColumnHeader>
             <Table.ColumnHeader w="sm">ID</Table.ColumnHeader>
             <Table.ColumnHeader w="sm">Title</Table.ColumnHeader>
             <Table.ColumnHeader w="sm">Description</Table.ColumnHeader>
@@ -94,6 +95,9 @@ function ItemsTable() {
         <Table.Body>
           {items?.map((item) => (
             <Table.Row key={item.id} opacity={isPlaceholderData ? 0.5 : 1}>
+              <Table.Cell truncate maxW="sm">
+                {item.owner_full_name}
+              </Table.Cell>
               <Table.Cell truncate maxW="sm">
                 {item.id}
               </Table.Cell>
