@@ -61,7 +61,7 @@ export class ItemsService {
   ): CancelablePromise<ItemsReadItemsResponse> {
     return __request(OpenAPI, {
       method: "GET",
-      url: "/api/v1/items/",
+      url: "/api/v1/drop-off-points/",
       query: {
         skip: data.skip,
         limit: data.limit,
@@ -85,7 +85,7 @@ export class ItemsService {
   ): CancelablePromise<ItemsCreateItemResponse> {
     return __request(OpenAPI, {
       method: "POST",
-      url: "/api/v1/items/",
+      url: "/api/v1/drop-off-points/",
       body: data.requestBody,
       mediaType: "application/json",
       errors: {
@@ -107,7 +107,7 @@ export class ItemsService {
   ): CancelablePromise<ItemsReadItemResponse> {
     return __request(OpenAPI, {
       method: "GET",
-      url: "/api/v1/items/{id}",
+      url: "/api/v1/drop-off-points/{id}",
       path: {
         id: data.id,
       },
@@ -131,7 +131,7 @@ export class ItemsService {
   ): CancelablePromise<ItemsUpdateItemResponse> {
     return __request(OpenAPI, {
       method: "PUT",
-      url: "/api/v1/items/{id}",
+      url: "/api/v1/drop-off-points/{id}",
       path: {
         id: data.id,
       },
@@ -156,7 +156,7 @@ export class ItemsService {
   ): CancelablePromise<ItemsDeleteItemResponse> {
     return __request(OpenAPI, {
       method: "DELETE",
-      url: "/api/v1/items/{id}",
+      url: "/api/v1/drop-off-points/{id}",
       path: {
         id: data.id,
       },
