@@ -13,26 +13,32 @@ export type HTTPValidationError = {
   detail?: Array<ValidationError>
 }
 
-export type ItemCreate = {
+export type DropOffPointCreate = {
   title: string
   description?: string | null
+  address?: string | null
 }
 
-export type ItemPublic = {
+export type DropOffPointPublic = {
   title: string
   description?: string | null
   id: string
+  address?: string | null
   owner_id: string
+  owner_full_name?: string | null
+  latitude: number
+  longitude: number
 }
 
-export type ItemsPublic = {
-  data: Array<ItemPublic>
+export type DropOffPointsPublic = {
+  data: Array<DropOffPointPublic>
   count: number
 }
 
-export type ItemUpdate = {
+export type DropOffPointUpdate = {
   title?: string | null
   description?: string | null
+  address?: string | null
 }
 
 export type Message = {
@@ -100,37 +106,38 @@ export type ValidationError = {
   type: string
 }
 
-export type ItemsReadItemsData = {
+export type DropOffPointsReadItemsData = {
   limit?: number
   skip?: number
+  use_pagination?: boolean
 }
 
-export type ItemsReadItemsResponse = ItemsPublic
+export type DropOffPointsReadItemsResponse = DropOffPointsPublic
 
-export type ItemsCreateItemData = {
-  requestBody: ItemCreate
+export type DropOffPointsCreateItemData = {
+  requestBody: DropOffPointCreate
 }
 
-export type ItemsCreateItemResponse = ItemPublic
+export type DropOffPointsCreateItemResponse = DropOffPointPublic
 
-export type ItemsReadItemData = {
+export type DropOffPointsReadItemData = {
   id: string
 }
 
-export type ItemsReadItemResponse = ItemPublic
+export type DropOffPointsReadItemResponse = DropOffPointPublic
 
-export type ItemsUpdateItemData = {
+export type DropOffPointsUpdateItemData = {
   id: string
-  requestBody: ItemUpdate
+  requestBody: DropOffPointUpdate
 }
 
-export type ItemsUpdateItemResponse = ItemPublic
+export type DropOffPointsUpdateItemResponse = DropOffPointPublic
 
-export type ItemsDeleteItemData = {
+export type DropOffPointsDeleteItemData = {
   id: string
 }
 
-export type ItemsDeleteItemResponse = Message
+export type DropOffPointsDeleteItemResponse = Message
 
 export type LoginLoginAccessTokenData = {
   formData: Body_login_login_access_token
@@ -219,3 +226,46 @@ export type UtilsTestEmailData = {
 export type UtilsTestEmailResponse = Message
 
 export type UtilsHealthCheckResponse = boolean
+
+export type AddressGetAddressData = {
+  query: string
+}
+export type AddressFeatureProperties = {
+  label: string
+  score: number
+  housenumber?: string
+  id: string
+  banId?: string
+  name: string
+  postcode: string
+  citycode: string
+  x: number
+  y: number
+  city: string
+  district?: string
+  context: string
+  type: string
+  importance: number
+  street: string
+}
+
+export type AddressFeatureGeometry = {
+  type: string
+  coordinates: [number, number]
+}
+
+export type AddressFeature = {
+  type: string
+  geometry: AddressFeatureGeometry
+  properties: AddressFeatureProperties
+}
+
+export type AddressGetAddressResponse = {
+  type: string
+  version: string
+  features: AddressFeature[]
+  attribution: string
+  licence: string
+  query: string
+  limit: number
+}

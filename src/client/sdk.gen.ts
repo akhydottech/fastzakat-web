@@ -4,16 +4,16 @@ import type { CancelablePromise } from "./core/CancelablePromise"
 import { OpenAPI } from "./core/OpenAPI"
 import { request as __request } from "./core/request"
 import type {
-  ItemsReadItemsData,
-  ItemsReadItemsResponse,
-  ItemsCreateItemData,
-  ItemsCreateItemResponse,
-  ItemsReadItemData,
-  ItemsReadItemResponse,
-  ItemsUpdateItemData,
-  ItemsUpdateItemResponse,
-  ItemsDeleteItemData,
-  ItemsDeleteItemResponse,
+  DropOffPointsReadItemsData,
+  DropOffPointsReadItemsResponse,
+  DropOffPointsCreateItemData,
+  DropOffPointsCreateItemResponse,
+  DropOffPointsReadItemData,
+  DropOffPointsReadItemResponse,
+  DropOffPointsUpdateItemData,
+  DropOffPointsUpdateItemResponse,
+  DropOffPointsDeleteItemData,
+  DropOffPointsDeleteItemResponse,
   LoginLoginAccessTokenData,
   LoginLoginAccessTokenResponse,
   LoginTestTokenResponse,
@@ -44,27 +44,29 @@ import type {
   UtilsTestEmailData,
   UtilsTestEmailResponse,
   UtilsHealthCheckResponse,
+  AddressGetAddressData,
 } from "./types.gen"
 
-export class ItemsService {
+export class DropOffPointsService {
   /**
-   * Read Items
-   * Retrieve items.
+   * Read Drop Off Points
+   * Retrieve drop off points.
    * @param data The data for the request.
    * @param data.skip
    * @param data.limit
-   * @returns ItemsPublic Successful Response
+   * @returns DropOffPointsPublic Successful Response
    * @throws ApiError
    */
-  public static readItems(
-    data: ItemsReadItemsData = {},
-  ): CancelablePromise<ItemsReadItemsResponse> {
+  public static readDropOffPoints(
+    data: DropOffPointsReadItemsData = {},
+  ): CancelablePromise<DropOffPointsReadItemsResponse> {
     return __request(OpenAPI, {
       method: "GET",
-      url: "/api/v1/items/",
+      url: "/api/v1/drop-off-points/",
       query: {
         skip: data.skip,
         limit: data.limit,
+        use_pagination: data.use_pagination,
       },
       errors: {
         422: "Validation Error",
@@ -73,19 +75,19 @@ export class ItemsService {
   }
 
   /**
-   * Create Item
-   * Create new item.
+   * Create Drop Off Point
+   * Create new drop off point.
    * @param data The data for the request.
    * @param data.requestBody
-   * @returns ItemPublic Successful Response
+   * @returns DropOffPointPublic Successful Response
    * @throws ApiError
    */
-  public static createItem(
-    data: ItemsCreateItemData,
-  ): CancelablePromise<ItemsCreateItemResponse> {
+  public static createDropOffPoint(
+    data: DropOffPointsCreateItemData,
+  ): CancelablePromise<DropOffPointsCreateItemResponse> {
     return __request(OpenAPI, {
       method: "POST",
-      url: "/api/v1/items/",
+      url: "/api/v1/drop-off-points/",
       body: data.requestBody,
       mediaType: "application/json",
       errors: {
@@ -95,19 +97,19 @@ export class ItemsService {
   }
 
   /**
-   * Read Item
-   * Get item by ID.
+   * Read Drop Off Point
+   * Get drop off point by ID.
    * @param data The data for the request.
    * @param data.id
-   * @returns ItemPublic Successful Response
+   * @returns DropOffPointPublic Successful Response
    * @throws ApiError
    */
-  public static readItem(
-    data: ItemsReadItemData,
-  ): CancelablePromise<ItemsReadItemResponse> {
+  public static readDropOffPoint(
+    data: DropOffPointsReadItemData,
+  ): CancelablePromise<DropOffPointsReadItemResponse> {
     return __request(OpenAPI, {
       method: "GET",
-      url: "/api/v1/items/{id}",
+      url: "/api/v1/drop-off-points/{id}",
       path: {
         id: data.id,
       },
@@ -118,20 +120,20 @@ export class ItemsService {
   }
 
   /**
-   * Update Item
-   * Update an item.
+   * Update Drop Off Point
+   * Update a drop off point.
    * @param data The data for the request.
    * @param data.id
    * @param data.requestBody
-   * @returns ItemPublic Successful Response
+   * @returns DropOffPointPublic Successful Response
    * @throws ApiError
    */
-  public static updateItem(
-    data: ItemsUpdateItemData,
-  ): CancelablePromise<ItemsUpdateItemResponse> {
+  public static updateDropOffPoint(
+    data: DropOffPointsUpdateItemData,
+  ): CancelablePromise<DropOffPointsUpdateItemResponse> {
     return __request(OpenAPI, {
       method: "PUT",
-      url: "/api/v1/items/{id}",
+      url: "/api/v1/drop-off-points/{id}",
       path: {
         id: data.id,
       },
@@ -144,19 +146,19 @@ export class ItemsService {
   }
 
   /**
-   * Delete Item
-   * Delete an item.
+   * Delete Drop Off Point
+   * Delete a drop off point.
    * @param data The data for the request.
    * @param data.id
    * @returns Message Successful Response
    * @throws ApiError
    */
-  public static deleteItem(
-    data: ItemsDeleteItemData,
-  ): CancelablePromise<ItemsDeleteItemResponse> {
+  public static deleteDropOffPoint(
+    data: DropOffPointsDeleteItemData,
+  ): CancelablePromise<DropOffPointsDeleteItemResponse> {
     return __request(OpenAPI, {
       method: "DELETE",
-      url: "/api/v1/items/{id}",
+      url: "/api/v1/drop-off-points/{id}",
       path: {
         id: data.id,
       },
@@ -518,6 +520,20 @@ export class UtilsService {
     return __request(OpenAPI, {
       method: "GET",
       url: "/api/v1/utils/health-check/",
+    })
+  }
+}
+
+export class AddressService {
+  public static getAddress(
+    data: AddressGetAddressData,
+  ): CancelablePromise<any> {
+    return __request(OpenAPI, {
+      method: "GET",
+      url: "/api/v1/address/search",
+      query: {
+        query: data.query,
+      },
     })
   }
 }

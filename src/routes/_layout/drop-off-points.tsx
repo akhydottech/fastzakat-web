@@ -11,9 +11,9 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router"
 import { FiSearch } from "react-icons/fi"
 import { z } from "zod"
 
-import { ItemsService } from "@/client"
+import { DropOffPointsService } from "@/client"
 import { ItemActionsMenu } from "@/components/Common/ItemActionsMenu"
-import AddItem from "@/components/Items/AddItem"
+import AddDropOffPoint from "@/components/drop-off-points/AddDropOffPoint"
 import PendingItems from "@/components/Pending/PendingItems"
 import {
   PaginationItems,
@@ -31,12 +31,12 @@ const PER_PAGE = 5
 function getItemsQueryOptions({ page }: { page: number }) {
   return {
     queryFn: () =>
-      ItemsService.readItems({ skip: (page - 1) * PER_PAGE, limit: PER_PAGE }),
+      DropOffPointsService.readDropOffPoints({ skip: (page - 1) * PER_PAGE, limit: PER_PAGE }),
     queryKey: ["items", { page }],
   }
 }
 
-export const Route = createFileRoute("/_layout/items")({
+export const Route = createFileRoute("/_layout/drop-off-points")({
   component: Items,
   validateSearch: (search) => itemsSearchSchema.parse(search),
 })
@@ -70,9 +70,9 @@ function ItemsTable() {
             <FiSearch />
           </EmptyState.Indicator>
           <VStack textAlign="center">
-            <EmptyState.Title>You don't have any items yet</EmptyState.Title>
+            <EmptyState.Title>You don't have any drop off points yet</EmptyState.Title>
             <EmptyState.Description>
-              Add a new item to get started
+              Add a new drop off point to get started
             </EmptyState.Description>
           </VStack>
         </EmptyState.Content>
@@ -85,15 +85,20 @@ function ItemsTable() {
       <Table.Root size={{ base: "sm", md: "md" }}>
         <Table.Header>
           <Table.Row>
+            <Table.ColumnHeader w="sm">Owner</Table.ColumnHeader>
             <Table.ColumnHeader w="sm">ID</Table.ColumnHeader>
             <Table.ColumnHeader w="sm">Title</Table.ColumnHeader>
             <Table.ColumnHeader w="sm">Description</Table.ColumnHeader>
+            <Table.ColumnHeader w="sm">Address</Table.ColumnHeader>
             <Table.ColumnHeader w="sm">Actions</Table.ColumnHeader>
           </Table.Row>
         </Table.Header>
         <Table.Body>
           {items?.map((item) => (
             <Table.Row key={item.id} opacity={isPlaceholderData ? 0.5 : 1}>
+              <Table.Cell truncate maxW="sm">
+                {item.owner_full_name}
+              </Table.Cell>
               <Table.Cell truncate maxW="sm">
                 {item.id}
               </Table.Cell>
@@ -103,10 +108,27 @@ function ItemsTable() {
               <Table.Cell
                 color={!item.description ? "gray" : "inherit"}
                 truncate
-                maxW="30%"
+                maxW="sm"
               >
-                {item.description || "N/A"}
+                {item.description ? (
+                  item.description.length > 30
+                    ? `${item.description.substring(0, 30)}...`
+                    : item.description
+                ) : "N/A"}
               </Table.Cell>
+
+              <Table.Cell
+                color={!item.address ? "gray" : "inherit"}
+                truncate
+                maxW="sm"
+              >
+                {item.address ? (
+                  item.address.length > 30
+                    ? `${item.address.substring(0, 30)}...`
+                    : item.address
+                ) : "N/A"}
+              </Table.Cell>
+
               <Table.Cell>
                 <ItemActionsMenu item={item} />
               </Table.Cell>
@@ -135,9 +157,9 @@ function Items() {
   return (
     <Container maxW="full">
       <Heading size="lg" pt={12}>
-        Items Management
+        Drop Off Points Management
       </Heading>
-      <AddItem />
+      <AddDropOffPoint />
       <ItemsTable />
     </Container>
   )

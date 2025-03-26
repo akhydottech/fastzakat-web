@@ -1,17 +1,20 @@
+import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { type SubmitHandler, useForm } from "react-hook-form"
+
 import {
   Button,
-  ButtonGroup,
   DialogActionTrigger,
+  DialogTitle,
   Input,
   Text,
+  Textarea,
   VStack,
 } from "@chakra-ui/react"
-import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useState } from "react"
-import { type SubmitHandler, useForm } from "react-hook-form"
-import { FaExchangeAlt } from "react-icons/fa"
+import { FaPlus } from "react-icons/fa"
 
-import { type ApiError, type ItemPublic, ItemsService } from "@/client"
+import { type DropOffPointCreate, DropOffPointsService } from "@/client"
+import type { ApiError } from "@/client/core/ApiError"
 import useCustomToast from "@/hooks/useCustomToast"
 import { handleError } from "@/utils"
 import {
@@ -21,21 +24,12 @@ import {
   DialogFooter,
   DialogHeader,
   DialogRoot,
-  DialogTitle,
   DialogTrigger,
 } from "../ui/dialog"
 import { Field } from "../ui/field"
+import AddressInputAutocomplete from "@/components/Common/address-input-autocomplete"
 
-interface EditItemProps {
-  item: ItemPublic
-}
-
-interface ItemUpdateForm {
-  title: string
-  description?: string
-}
-
-const EditItem = ({ item }: EditItemProps) => {
+const AddDropOffPoint = () => {
   const [isOpen, setIsOpen] = useState(false)
   const queryClient = useQueryClient()
   const { showSuccessToast } = useCustomToast()
@@ -43,21 +37,26 @@ const EditItem = ({ item }: EditItemProps) => {
     register,
     handleSubmit,
     reset,
-    formState: { errors, isSubmitting },
-  } = useForm<ItemUpdateForm>({
+    setValue,
+    watch,
+    formState: { errors, isValid, isSubmitting },
+  } = useForm<DropOffPointCreate>({
     mode: "onBlur",
     criteriaMode: "all",
     defaultValues: {
-      ...item,
-      description: item.description ?? undefined,
+      title: "",
+      description: "",
+      address: "",
     },
   })
 
+  const address = watch("address")
+
   const mutation = useMutation({
-    mutationFn: (data: ItemUpdateForm) =>
-      ItemsService.updateItem({ id: item.id, requestBody: data }),
+    mutationFn: (data: DropOffPointCreate) =>
+      DropOffPointsService.createDropOffPoint({ requestBody: data }),
     onSuccess: () => {
-      showSuccessToast("Item updated successfully.")
+      showSuccessToast("Drop off point created successfully.")
       reset()
       setIsOpen(false)
     },
@@ -69,7 +68,7 @@ const EditItem = ({ item }: EditItemProps) => {
     },
   })
 
-  const onSubmit: SubmitHandler<ItemUpdateForm> = async (data) => {
+  const onSubmit: SubmitHandler<DropOffPointCreate> = (data) => {
     mutation.mutate(data)
   }
 
@@ -81,18 +80,18 @@ const EditItem = ({ item }: EditItemProps) => {
       onOpenChange={({ open }) => setIsOpen(open)}
     >
       <DialogTrigger asChild>
-        <Button variant="ghost">
-          <FaExchangeAlt fontSize="16px" />
-          Edit Item
+        <Button value="add-drop-off-point" my={4}>
+          <FaPlus fontSize="16px" />
+          Add Drop Off Point
         </Button>
       </DialogTrigger>
       <DialogContent>
         <form onSubmit={handleSubmit(onSubmit)}>
           <DialogHeader>
-            <DialogTitle>Edit Item</DialogTitle>
+            <DialogTitle>Add Drop Off Point</DialogTitle>
           </DialogHeader>
           <DialogBody>
-            <Text mb={4}>Update the item details below.</Text>
+            <Text mb={4}>Fill in the details to add a new drop off point.</Text>
             <VStack gap={4}>
               <Field
                 required
@@ -103,7 +102,7 @@ const EditItem = ({ item }: EditItemProps) => {
                 <Input
                   id="title"
                   {...register("title", {
-                    required: "Title is required",
+                    required: "Title is required.",
                   })}
                   placeholder="Title"
                   type="text"
@@ -115,31 +114,46 @@ const EditItem = ({ item }: EditItemProps) => {
                 errorText={errors.description?.message}
                 label="Description"
               >
-                <Input
+                <Textarea
                   id="description"
                   {...register("description")}
                   placeholder="Description"
-                  type="text"
+                />
+              </Field>
+
+              <Field
+                invalid={!!errors.address}
+                errorText={errors.address?.message}
+                label="Address"
+              >
+                <AddressInputAutocomplete
+                  id="address"
+                  value={address || ""}
+                  onChange={(value) => setValue("address", value)}
+                  placeholder="Address"
                 />
               </Field>
             </VStack>
           </DialogBody>
 
           <DialogFooter gap={2}>
-            <ButtonGroup>
-              <DialogActionTrigger asChild>
-                <Button
-                  variant="subtle"
-                  colorPalette="gray"
-                  disabled={isSubmitting}
-                >
-                  Cancel
-                </Button>
-              </DialogActionTrigger>
-              <Button variant="solid" type="submit" loading={isSubmitting}>
-                Save
+            <DialogActionTrigger asChild>
+              <Button
+                variant="subtle"
+                colorPalette="gray"
+                disabled={isSubmitting}
+              >
+                Cancel
               </Button>
-            </ButtonGroup>
+            </DialogActionTrigger>
+            <Button
+              variant="solid"
+              type="submit"
+              disabled={!isValid}
+              loading={isSubmitting}
+            >
+              Save
+            </Button>
           </DialogFooter>
         </form>
         <DialogCloseTrigger />
@@ -148,4 +162,4 @@ const EditItem = ({ item }: EditItemProps) => {
   )
 }
 
-export default EditItem
+export default AddDropOffPoint
