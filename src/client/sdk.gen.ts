@@ -529,7 +529,7 @@ export class AddressService {
   ): CancelablePromise<any> {
     return __request(OpenAPI, {
       method: "GET",
-      url: "/api/v1/address/",
+      url: "/api/v1/address/search",
       query: {
         query: data.query,
       },

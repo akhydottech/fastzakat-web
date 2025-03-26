@@ -26,6 +26,7 @@ import {
   DialogTrigger,
 } from "../ui/dialog"
 import { Field } from "../ui/field"
+import AddressInputAutocomplete from "@/components/Common/address-input-autocomplete"
 
 interface EditDropOffPointProps {
   item: DropOffPointPublic
@@ -45,6 +46,8 @@ const EditDropOffPoint = ({ item }: EditDropOffPointProps) => {
     register,
     handleSubmit,
     reset,
+    setValue,
+    watch,
     formState: { errors, isSubmitting },
   } = useForm<DropOffPointUpdateForm>({
     mode: "onBlur",
@@ -63,6 +66,8 @@ const EditDropOffPoint = ({ item }: EditDropOffPointProps) => {
       address: item.address ?? undefined,
     })
   }, [item, reset])
+
+  const address = watch("address")
 
   const mutation = useMutation({
     mutationFn: (data: DropOffPointUpdateForm) =>
@@ -130,7 +135,6 @@ const EditDropOffPoint = ({ item }: EditDropOffPointProps) => {
                   id="description"
                   {...register("description")}
                   placeholder="Description"
-                  type="text"
                 />
               </Field>
 
@@ -139,11 +143,11 @@ const EditDropOffPoint = ({ item }: EditDropOffPointProps) => {
                 errorText={errors.address?.message}
                 label="Address"
               >
-                <Input
+                <AddressInputAutocomplete
                   id="address"
-                  {...register("address")}
+                  value={address || ""}
+                  onChange={(value) => setValue("address", value)}
                   placeholder="Address"
-                  type="text"
                 />
               </Field>
             </VStack>
