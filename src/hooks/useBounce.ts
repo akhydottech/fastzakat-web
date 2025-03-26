@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from "react"
+import { useEffect, useRef } from "react"
 
 export const useBounce = (callback: () => void, delay: number, deps: any[] = []) => {
   const timeoutRef = useRef<NodeJS.Timeout>()
