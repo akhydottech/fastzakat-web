@@ -7,6 +7,7 @@ import {
   DialogTitle,
   Input,
   Text,
+  Textarea,
   VStack,
 } from "@chakra-ui/react"
 import { useState } from "react"
@@ -108,11 +109,10 @@ const AddDropOffPoint = () => {
                 errorText={errors.description?.message}
                 label="Description"
               >
-                <Input
+                <Textarea
                   id="description"
                   {...register("description")}
                   placeholder="Description"
-                  type="text"
                 />
               </Field>
 

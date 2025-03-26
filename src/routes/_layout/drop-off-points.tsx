@@ -89,6 +89,7 @@ function ItemsTable() {
             <Table.ColumnHeader w="sm">ID</Table.ColumnHeader>
             <Table.ColumnHeader w="sm">Title</Table.ColumnHeader>
             <Table.ColumnHeader w="sm">Description</Table.ColumnHeader>
+            <Table.ColumnHeader w="sm">Address</Table.ColumnHeader>
             <Table.ColumnHeader w="sm">Actions</Table.ColumnHeader>
           </Table.Row>
         </Table.Header>
@@ -107,10 +108,27 @@ function ItemsTable() {
               <Table.Cell
                 color={!item.description ? "gray" : "inherit"}
                 truncate
-                maxW="30%"
+                maxW="sm"
               >
-                {item.description || "N/A"}
+                {item.description ? (
+                  item.description.length > 30
+                    ? `${item.description.substring(0, 30)}...`
+                    : item.description
+                ) : "N/A"}
               </Table.Cell>
+
+              <Table.Cell
+                color={!item.address ? "gray" : "inherit"}
+                truncate
+                maxW="sm"
+              >
+                {item.address ? (
+                  item.address.length > 30
+                    ? `${item.address.substring(0, 30)}...`
+                    : item.address
+                ) : "N/A"}
+              </Table.Cell>
+
               <Table.Cell>
                 <ItemActionsMenu item={item} />
               </Table.Cell>
