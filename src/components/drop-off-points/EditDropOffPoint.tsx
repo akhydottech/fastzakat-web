@@ -4,6 +4,7 @@ import {
   DialogActionTrigger,
   Input,
   Text,
+  Textarea,
   VStack,
 } from "@chakra-ui/react"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
@@ -125,7 +126,7 @@ const EditDropOffPoint = ({ item }: EditDropOffPointProps) => {
                 errorText={errors.description?.message}
                 label="Description"
               >
-                <Input
+                <Textarea
                   id="description"
                   {...register("description")}
                   placeholder="Description"

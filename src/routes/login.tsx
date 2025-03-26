@@ -69,8 +69,7 @@ function Login() {
         <Image
           src={Logo}
           alt="FastAPI logo"
-          height="auto"
-          maxW="2xs"
+          height="48px"
           alignSelf="center"
           mb={4}
         />
