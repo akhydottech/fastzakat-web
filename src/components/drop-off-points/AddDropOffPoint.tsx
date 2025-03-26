@@ -27,6 +27,7 @@ import {
   DialogTrigger,
 } from "../ui/dialog"
 import { Field } from "../ui/field"
+import AddressInputAutocomplete from "@/components/Common/address-input-autocomplete"
 
 const AddDropOffPoint = () => {
   const [isOpen, setIsOpen] = useState(false)
@@ -36,6 +37,8 @@ const AddDropOffPoint = () => {
     register,
     handleSubmit,
     reset,
+    setValue,
+    watch,
     formState: { errors, isValid, isSubmitting },
   } = useForm<DropOffPointCreate>({
     mode: "onBlur",
@@ -46,6 +49,8 @@ const AddDropOffPoint = () => {
       address: "",
     },
   })
+
+  const address = watch("address")
 
   const mutation = useMutation({
     mutationFn: (data: DropOffPointCreate) =>
@@ -121,11 +126,11 @@ const AddDropOffPoint = () => {
                 errorText={errors.address?.message}
                 label="Address"
               >
-                <Input
+                <AddressInputAutocomplete
                   id="address"
-                  {...register("address")}
+                  value={address || ""}
+                  onChange={(value) => setValue("address", value)}
                   placeholder="Address"
-                  type="text"
                 />
               </Field>
             </VStack>
