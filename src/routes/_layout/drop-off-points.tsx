@@ -13,6 +13,7 @@ import { z } from "zod"
 
 import { DropOffPointsService } from "@/client"
 import { ItemActionsMenu } from "@/components/Common/ItemActionsMenu"
+import Map from "@/components/Common/Map"
 import AddDropOffPoint from "@/components/drop-off-points/AddDropOffPoint"
 import PendingItems from "@/components/Pending/PendingItems"
 import {
@@ -160,6 +161,7 @@ function Items() {
         Drop Off Points Management
       </Heading>
       <AddDropOffPoint />
+      <Map height="500px" />
       <ItemsTable />
     </Container>
   )
