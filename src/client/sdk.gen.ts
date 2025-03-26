@@ -66,6 +66,7 @@ export class DropOffPointsService {
       query: {
         skip: data.skip,
         limit: data.limit,
+        use_pagination: data.use_pagination,
       },
       errors: {
         422: "Validation Error",

@@ -26,6 +26,8 @@ export type DropOffPointPublic = {
   address?: string | null
   owner_id: string
   owner_full_name?: string | null
+  latitude: number
+  longitude: number
 }
 
 export type DropOffPointsPublic = {
@@ -107,6 +109,7 @@ export type ValidationError = {
 export type DropOffPointsReadItemsData = {
   limit?: number
   skip?: number
+  use_pagination?: boolean
 }
 
 export type DropOffPointsReadItemsResponse = DropOffPointsPublic
