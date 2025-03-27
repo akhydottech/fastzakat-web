@@ -10,6 +10,7 @@ const items = [
   { icon: FiHome, title: "Dashboard", path: "/" },
   { icon: FiBriefcase, title: "Drop Off Points", path: "/drop-off-points" },
   { icon: FiSettings, title: "User Settings", path: "/settings" },
+  { icon: FiBriefcase, title: "Organizations", path: "/organizations" },
 ]
 
 interface SidebarItemsProps {
@@ -26,8 +27,12 @@ const SidebarItems = ({ onClose }: SidebarItemsProps) => {
   const queryClient = useQueryClient()
   const currentUser = queryClient.getQueryData<UserPublic>(["currentUser"])
 
-  const finalItems: Item[] = currentUser?.is_superuser
+  let finalItems: Item[] = currentUser?.is_superuser
     ? [...items, { icon: FiUsers, title: "Admin", path: "/admin" }]
+    : items
+
+  finalItems = currentUser?.is_organization
+    ? [...items, { icon: FiUsers, title: "Organization Members", path: "/organization-members" }]
     : items
 
   const listItems = finalItems.map(({ icon, title, path }) => (
