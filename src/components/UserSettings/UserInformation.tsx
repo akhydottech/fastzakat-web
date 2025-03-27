@@ -32,6 +32,7 @@ const UserInformation = () => {
     handleSubmit,
     reset,
     getValues,
+    setValue,
     formState: { isSubmitting, errors, isDirty },
   } = useForm<UserPublic>({
     mode: "onBlur",
@@ -39,6 +40,7 @@ const UserInformation = () => {
     defaultValues: {
       full_name: currentUser?.full_name,
       email: currentUser?.email,
+      is_organization: currentUser?.is_organization,
     },
   })
 
@@ -49,7 +51,13 @@ const UserInformation = () => {
   const mutation = useMutation({
     mutationFn: (data: UserUpdateMe) =>
       UsersService.updateUserMe({ requestBody: data }),
-    onSuccess: () => {
+    onSuccess: (data) => {
+      reset({
+        full_name: data.full_name,
+        email: data.email,
+        is_organization: data.is_organization,
+      })
+      setEditMode(false)
       showSuccessToast("User updated successfully.")
     },
     onError: (err: ApiError) => {
@@ -117,6 +125,27 @@ const UserInformation = () => {
             ) : (
               <Text fontSize="md" py={2} truncate maxW="sm">
                 {currentUser?.email}
+              </Text>
+            )}
+          </Field>
+          <Field mt={4} label="Organization Account">
+            {editMode ? (
+              <Button
+                variant={getValues("is_organization") ? "solid" : "outline"}
+                onClick={() => {
+                  const currentValue = getValues("is_organization")
+                  setValue("is_organization", !currentValue, {
+                    shouldDirty: true,
+                    shouldValidate: true,
+                  })
+                }}
+                size="md"
+              >
+                {getValues("is_organization") ? "Yes" : "No"}
+              </Button>
+            ) : (
+              <Text fontSize="md" color={!currentUser?.is_organization ? "gray" : "inherit"}>
+                {currentUser?.is_organization ? "Yes" : "No"}
               </Text>
             )}
           </Field>

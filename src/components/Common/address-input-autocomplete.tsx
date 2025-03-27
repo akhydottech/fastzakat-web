@@ -31,12 +31,12 @@ const AddressInputAutocomplete = ({
       return
     }
     try {
-      const response = await AddressService.getAddress({ query })
-      const suggestions = response.features.map((feature: any) => ({
+      const response = await AddressService.searchAddress({ query })
+      const suggestions = response.features?.map((feature: any) => ({
         label: feature.properties.label,
         value: feature.properties.label,
       }))
-      setAddressSuggestions(suggestions)
+      setAddressSuggestions(suggestions || [])
     } catch (error) {
       console.error("Error fetching address suggestions:", error)
       setAddressSuggestions([])
