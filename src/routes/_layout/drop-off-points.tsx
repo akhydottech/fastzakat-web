@@ -15,6 +15,7 @@ import { ItemActionsMenu } from "@/components/Common/ItemActionsMenu"
 import Map from "@/components/Common/Map"
 import AddDropOffPoint from "@/components/drop-off-points/AddDropOffPoint"
 import PendingItems from "@/components/Pending/PendingItems"
+import { useTranslation } from "react-i18next"
 
 const itemsSearchSchema = z.object({
   page: z.number().catch(1),
@@ -35,7 +36,7 @@ export const Route = createFileRoute("/_layout/drop-off-points")({
 })
 
 function ItemsTable() {
-
+  const { t } = useTranslation()
 
   const { data, isLoading, isPlaceholderData } = useQuery({
     ...getItemsQueryOptions(),
@@ -56,9 +57,9 @@ function ItemsTable() {
             <FiSearch />
           </EmptyState.Indicator>
           <VStack textAlign="center">
-            <EmptyState.Title>You don't have any drop off points yet</EmptyState.Title>
+            <EmptyState.Title>{t("NO_DROP_OFF_POINTS")}</EmptyState.Title>
             <EmptyState.Description>
-              Add a new drop off point to get started
+              {t("ADD_DROP_OFF_POINT")}
             </EmptyState.Description>
           </VStack>
         </EmptyState.Content>
@@ -71,13 +72,13 @@ function ItemsTable() {
       <Table.Root size={{ base: "sm", md: "md" }}>
         <Table.Header>
           <Table.Row>
-            <Table.ColumnHeader w="sm">Owner</Table.ColumnHeader>
-            <Table.ColumnHeader w="sm">ID</Table.ColumnHeader>
-            <Table.ColumnHeader w="sm">Title</Table.ColumnHeader>
-            <Table.ColumnHeader w="sm">Description</Table.ColumnHeader>
-            <Table.ColumnHeader w="sm">Address</Table.ColumnHeader>
-            <Table.ColumnHeader w="sm">Done</Table.ColumnHeader>
-            <Table.ColumnHeader w="sm">Actions</Table.ColumnHeader>
+            <Table.ColumnHeader w="sm">{t("OWNER")}</Table.ColumnHeader>
+            <Table.ColumnHeader w="sm">{t("ID")}</Table.ColumnHeader>
+            <Table.ColumnHeader w="sm">{t("TITLE")}</Table.ColumnHeader>
+            <Table.ColumnHeader w="sm">{t("DESCRIPTION")}</Table.ColumnHeader>
+            <Table.ColumnHeader w="sm">{t("ADDRESS")}</Table.ColumnHeader>
+            <Table.ColumnHeader w="sm">{t("DONE")}</Table.ColumnHeader>
+            <Table.ColumnHeader w="sm">{t("ACTIONS")}</Table.ColumnHeader>
           </Table.Row>
         </Table.Header>
         <Table.Body>
@@ -132,10 +133,11 @@ function ItemsTable() {
 }
 
 function Items() {
+  const { t } = useTranslation()
   return (
     <Container maxW="full">
       <Heading size="lg" pt={12}>
-        Drop Off Points Management
+        {t("DROP_OFF_POINTS_MANAGEMENT")}
       </Heading>
       <AddDropOffPoint />
       <Map height="500px" />

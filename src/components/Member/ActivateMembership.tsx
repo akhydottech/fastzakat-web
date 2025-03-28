@@ -20,12 +20,14 @@ import {
   DialogRoot,
   DialogTrigger,
 } from "../ui/dialog"
+import { useTranslation } from "react-i18next"
 
 
 const ActivateMembership = ({ invitationId }: { invitationId: string }) => {
   const [isOpen, setIsOpen] = useState(false)
   const queryClient = useQueryClient()
   const { showSuccessToast } = useCustomToast()
+  const { t } = useTranslation()
   const {
     handleSubmit,
     reset,
@@ -42,7 +44,7 @@ const ActivateMembership = ({ invitationId }: { invitationId: string }) => {
     mutationFn: (data: MembersAcceptInvitationData) =>
       MembersService.acceptInvitation({ invitationId: data.invitationId }),
     onSuccess: () => {
-      showSuccessToast("Membership activated successfully.")
+      showSuccessToast(t("MEMBERSHIP_ACTIVATED_SUCCESSFULLY"))
       reset()
       setIsOpen(false)
     },
@@ -68,13 +70,13 @@ const ActivateMembership = ({ invitationId }: { invitationId: string }) => {
       <DialogTrigger asChild>
         <Button value="add-member" my={4}>
           <FaPlus fontSize="16px" />
-          Activate Membership
+          {t("ACTIVATE_MEMBERSHIP")}
         </Button>
       </DialogTrigger>
       <DialogContent>
         <form onSubmit={handleSubmit(() => onSubmit({ invitationId }))} >
           <DialogHeader>
-            <DialogTitle>Activate Membership</DialogTitle>
+            <DialogTitle>{t("ACTIVATE_MEMBERSHIP")}</DialogTitle>
           </DialogHeader>
 
           <DialogFooter gap={2}>
@@ -84,7 +86,7 @@ const ActivateMembership = ({ invitationId }: { invitationId: string }) => {
                 colorPalette="gray"
                 disabled={isSubmitting}
               >
-                Cancel
+                {t("CANCEL")}
               </Button>
             </DialogActionTrigger>
             <Button
@@ -93,7 +95,7 @@ const ActivateMembership = ({ invitationId }: { invitationId: string }) => {
               disabled={!isValid}
               loading={isSubmitting}
             >
-              Save
+              {t("SAVE")}
             </Button>
           </DialogFooter>
         </form>

@@ -25,9 +25,10 @@ import {
   DialogTrigger,
 } from "../ui/dialog"
 import { Field } from "../ui/field"
-
+import { useTranslation } from "react-i18next"
 
 const AddMember = () => {
+  const { t } = useTranslation()
   const [isOpen, setIsOpen] = useState(false)
   const queryClient = useQueryClient()
   const { showSuccessToast } = useCustomToast()
@@ -48,7 +49,7 @@ const AddMember = () => {
     mutationFn: (data: OrganizationsInviteUserToOrganizationData) =>
       OrganizationsService.inviteUserToOrganization({ email: data.email }),
     onSuccess: () => {
-      showSuccessToast("Member added successfully.")
+      showSuccessToast(t("MEMBER_ADDED_SUCCESSFULLY"))
       reset()
       setIsOpen(false)
     },
@@ -74,32 +75,30 @@ const AddMember = () => {
       <DialogTrigger asChild>
         <Button value="add-member" my={4}>
           <FaPlus fontSize="16px" />
-          Add Member
+          {t("ADD_MEMBER")}
         </Button>
       </DialogTrigger>
       <DialogContent>
         <form onSubmit={handleSubmit(onSubmit)}>
           <DialogHeader>
-            <DialogTitle>Add Organization Member</DialogTitle>
+            <DialogTitle>{t("ADD_ORGANIZATION_MEMBER")}</DialogTitle>
           </DialogHeader>
           <DialogBody>
-            <Text mb={4}>
-              Fill in the form below to add a new member to your organization.
-            </Text>
+            <Text mb={4}>{t("ADD_ORGANIZATION_MEMBER_DESCRIPTION")}</Text>
             <VStack gap={4}>
               <Field
                 required
                 invalid={!!errors.email}
                 errorText={errors.email?.message}
-                label="Email"
+                label={t("EMAIL")}
               >
                 <Input
                   id="email"
                   {...register("email", {
-                    required: "Email is required",
+                    required: t("EMAIL_REQUIRED"),
                     pattern: emailPattern,
                   })}
-                  placeholder="Email"
+                  placeholder={t("EMAIL")}
                   type="email"
                 />
               </Field>
@@ -113,7 +112,7 @@ const AddMember = () => {
                 colorPalette="gray"
                 disabled={isSubmitting}
               >
-                Cancel
+                {t("CANCEL")}
               </Button>
             </DialogActionTrigger>
             <Button
@@ -122,7 +121,7 @@ const AddMember = () => {
               disabled={!isValid}
               loading={isSubmitting}
             >
-              Save
+              {t("SAVE")}
             </Button>
           </DialogFooter>
         </form>

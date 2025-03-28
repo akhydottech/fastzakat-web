@@ -16,8 +16,10 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import useCustomToast from "@/hooks/useCustomToast"
+import { useTranslation } from "react-i18next"
 
 const DeleteDropOffPoint = ({ id }: { id: string }) => {
+  const { t } = useTranslation()
   const [isOpen, setIsOpen] = useState(false)
   const queryClient = useQueryClient()
   const { showSuccessToast, showErrorToast } = useCustomToast()
@@ -59,7 +61,7 @@ const DeleteDropOffPoint = ({ id }: { id: string }) => {
       <DialogTrigger asChild>
         <Button variant="ghost" size="sm" colorPalette="red">
           <FiTrash2 fontSize="16px" />
-          Delete Drop Off Point
+          {t("DELETE_DROP_OFF_POINT")}
         </Button>
       </DialogTrigger>
 
@@ -67,12 +69,11 @@ const DeleteDropOffPoint = ({ id }: { id: string }) => {
         <form onSubmit={handleSubmit(onSubmit)}>
           <DialogCloseTrigger />
           <DialogHeader>
-            <DialogTitle>Delete Drop Off Point</DialogTitle>
+            <DialogTitle>{t("DELETE_DROP_OFF_POINT")}</DialogTitle>
           </DialogHeader>
           <DialogBody>
             <Text mb={4}>
-              This drop off point will be permanently deleted. Are you sure? You will not
-              be able to undo this action.
+              {t("DELETE_DROP_OFF_POINT_CONFIRMATION")}
             </Text>
           </DialogBody>
 
@@ -83,7 +84,7 @@ const DeleteDropOffPoint = ({ id }: { id: string }) => {
                 colorPalette="gray"
                 disabled={isSubmitting}
               >
-                Cancel
+                {t("CANCEL")}
               </Button>
             </DialogActionTrigger>
             <Button
@@ -92,7 +93,7 @@ const DeleteDropOffPoint = ({ id }: { id: string }) => {
               type="submit"
               loading={isSubmitting}
             >
-              Delete
+              {t("DELETE")}
             </Button>
           </DialogFooter>
         </form>

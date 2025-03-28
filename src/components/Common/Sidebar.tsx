@@ -15,8 +15,10 @@ import {
   DrawerTrigger,
 } from "../ui/drawer"
 import SidebarItems from "./SidebarItems"
+import { useTranslation } from "react-i18next"
 
 const Sidebar = () => {
+  const { t } = useTranslation()
   const queryClient = useQueryClient()
   const currentUser = queryClient.getQueryData<UserPublic>(["currentUser"])
   const { logout } = useAuth()
@@ -61,12 +63,12 @@ const Sidebar = () => {
                   py={2}
                 >
                   <FiLogOut />
-                  <Text>Log Out</Text>
+                  <Text>{t("LOG_OUT")}</Text>
                 </Flex>
               </Box>
               {currentUser?.email && (
                 <Text fontSize="sm" p={2} truncate maxW="sm">
-                  Logged in as: {currentUser.email}
+                  {t("LOGGED_IN_AS")}: {currentUser.email}
                 </Text>
               )}
             </Flex>

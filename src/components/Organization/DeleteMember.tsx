@@ -16,8 +16,10 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import useCustomToast from "@/hooks/useCustomToast"
+import { useTranslation } from "react-i18next"
 
 const DeleteUser = ({ id }: { id: string }) => {
+  const { t } = useTranslation()
   const [isOpen, setIsOpen] = useState(false)
   const queryClient = useQueryClient()
   const { showSuccessToast, showErrorToast } = useCustomToast()
@@ -33,11 +35,11 @@ const DeleteUser = ({ id }: { id: string }) => {
   const mutation = useMutation({
     mutationFn: deleteMember,
     onSuccess: () => {
-      showSuccessToast("The user was deleted successfully")
+      showSuccessToast(t("MEMBER_DELETED_SUCCESSFULLY"))
       setIsOpen(false)
     },
     onError: () => {
-      showErrorToast("An error occurred while deleting the user")
+      showErrorToast(t("MEMBER_DELETION_ERROR"))
     },
     onSettled: () => {
       queryClient.invalidateQueries()
@@ -59,17 +61,17 @@ const DeleteUser = ({ id }: { id: string }) => {
       <DialogTrigger asChild>
         <Button variant="ghost" size="sm" colorPalette="red">
           <FiTrash2 fontSize="16px" />
-          Delete Member
+          {t("DELETE_MEMBER")}
         </Button>
       </DialogTrigger>
       <DialogContent>
         <form onSubmit={handleSubmit(onSubmit)}>
           <DialogHeader>
-            <DialogTitle>Delete Member</DialogTitle>
+            <DialogTitle>{t("DELETE_MEMBER")}</DialogTitle>
           </DialogHeader>
           <DialogBody>
             <Text mb={4}>
-              Are you sure you want to delete this member? This action cannot be undone.
+              {t("DELETE_MEMBER_CONFIRMATION")}
             </Text>
           </DialogBody>
 
@@ -80,7 +82,7 @@ const DeleteUser = ({ id }: { id: string }) => {
                 colorPalette="gray"
                 disabled={isSubmitting}
               >
-                Cancel
+                {t("CANCEL")}
               </Button>
             </DialogActionTrigger>
             <Button
@@ -89,7 +91,7 @@ const DeleteUser = ({ id }: { id: string }) => {
               type="submit"
               loading={isSubmitting}
             >
-              Delete
+              {t("DELETE")}
             </Button>
           </DialogFooter>
           <DialogCloseTrigger />

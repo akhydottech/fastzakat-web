@@ -1,6 +1,7 @@
 import { Button } from "@chakra-ui/react"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { FaCheck, FaTimes } from "react-icons/fa"
+import { useTranslation } from "react-i18next"
 
 import { type ApiError, type DropOffPointPublic, DropOffPointsService } from "@/client"
 import useCustomToast from "@/hooks/useCustomToast"
@@ -13,7 +14,7 @@ interface ToggleStatusDropOffPointProps {
 const ToggleStatusDropOffPoint = ({ item }: ToggleStatusDropOffPointProps) => {
   const queryClient = useQueryClient()
   const { showSuccessToast } = useCustomToast()
-
+  const { t } = useTranslation()
   const mutation = useMutation({
     mutationFn: (isDone: boolean) =>
       DropOffPointsService.setDropOffPointDone({
@@ -22,7 +23,7 @@ const ToggleStatusDropOffPoint = ({ item }: ToggleStatusDropOffPointProps) => {
       }),
     onSuccess: () => {
       showSuccessToast(
-        `Drop off point marked as ${item.is_done ? "not done" : "done"} successfully.`
+        t(item.is_done ? "DROP_OFF_POINT_MARKED_AS_NOT_DONE" : "DROP_OFF_POINT_MARKED_AS_DONE")
       )
     },
     onError: (err: ApiError) => {
@@ -43,12 +44,12 @@ const ToggleStatusDropOffPoint = ({ item }: ToggleStatusDropOffPointProps) => {
       {item.is_done ? (
         <>
           <FaTimes fontSize="16px" />
-          Mark as Not Done
+          {t("MARK_AS_NOT_DONE")}
         </>
       ) : (
         <>
           <FaCheck fontSize="16px" />
-          Mark as Done
+          {t("MARK_AS_DONE")}
         </>
       )}
     </Button>

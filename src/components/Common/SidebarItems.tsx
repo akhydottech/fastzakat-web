@@ -6,12 +6,7 @@ import type { IconType } from "react-icons/lib"
 
 import type { UserPublic } from "@/client"
 
-const items = [
-  { icon: FiHome, title: "Dashboard", path: "/" },
-  { icon: FiBriefcase, title: "Drop Off Points", path: "/drop-off-points" },
-  { icon: FiSettings, title: "User Settings", path: "/settings" },
-  { icon: FiBriefcase, title: "Organizations", path: "/organizations" },
-]
+import { useTranslation } from "react-i18next"
 
 interface SidebarItemsProps {
   onClose?: () => void
@@ -24,16 +19,26 @@ interface Item {
 }
 
 const SidebarItems = ({ onClose }: SidebarItemsProps) => {
+  const { t } = useTranslation()
   const queryClient = useQueryClient()
   const currentUser = queryClient.getQueryData<UserPublic>(["currentUser"])
 
-  let finalItems: Item[] = currentUser?.is_superuser
-    ? [...items, { icon: FiUsers, title: "Admin", path: "/admin" }]
-    : items
+  const items = [
+    { icon: FiHome, title: t("DASHBOARD"), path: "/" },
+    { icon: FiBriefcase, title: t("DROP_OFF_POINTS"), path: "/drop-off-points" },
+    { icon: FiSettings, title: t("USER_SETTINGS"), path: "/settings" },
+    { icon: FiBriefcase, title: t("ORGANIZATIONS"), path: "/organizations" },
+  ]
+  console.log(currentUser)
+  let finalItems: Item[] = items
 
-  finalItems = currentUser?.is_organization
-    ? [...items, { icon: FiUsers, title: "Organization Members", path: "/organization-members" }]
-    : items
+  if (currentUser?.is_superuser) {
+    finalItems = [...finalItems, { icon: FiUsers, title: t("ADMIN"), path: "/admin" }]
+  }
+
+  if (currentUser?.is_organization) {
+    finalItems = [...finalItems, { icon: FiUsers, title: t("ORGANIZATION_MEMBERS"), path: "/organization-members" }]
+  }
 
   const listItems = finalItems.map(({ icon, title, path }) => (
     <RouterLink key={title} to={path} onClick={onClose}>

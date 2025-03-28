@@ -35,8 +35,10 @@ import {
 } from "../ui/dialog";
 import { Field } from "../ui/field";
 import AddressInputAutocomplete from "@/components/Common/address-input-autocomplete";
+import { useTranslation } from "react-i18next";
 
 const AddDropOffPoint = () => {
+  const { t } = useTranslation();
   const queryClient = useQueryClient();
   const currentUser = queryClient.getQueryData<UserPublic>(["currentUser"]);
 
@@ -67,7 +69,7 @@ const AddDropOffPoint = () => {
     mutationFn: (data: DropOffPointCreate) =>
       DropOffPointsService.createDropOffPoint({ requestBody: data }),
     onSuccess: () => {
-      showSuccessToast("Drop off point created successfully.");
+      showSuccessToast(t("DROP_OFF_POINT_CREATED_SUCCESSFULLY"));
       reset();
       setIsOpen(false);
     },
@@ -81,18 +83,18 @@ const AddDropOffPoint = () => {
 
   let membersCollection;
 
-  if (currentUser?.is_organization) {
-    const { data: members } = useQuery({
-      queryKey: ["members"],
-      queryFn: () => OrganizationsService.getMembers(),
-    });
+  const { data: members } = useQuery({
+    queryKey: ["members"],
+    queryFn: () => OrganizationsService.getMembers(),
+    enabled: !!currentUser?.is_organization,
+  });
 
+  if (currentUser?.is_organization && members?.data) {
     membersCollection = createListCollection({
-      items:
-        members?.data?.map((member) => ({
-          label: member.full_name || member.email,
-          value: member.id,
-        })) || [],
+      items: members.data.map((member) => ({
+        label: member.full_name || member.email,
+        value: member.id,
+      })),
     });
   }
 
@@ -110,29 +112,29 @@ const AddDropOffPoint = () => {
       <DialogTrigger asChild>
         <Button value="add-drop-off-point" my={4}>
           <FaPlus fontSize="16px" />
-          Add Drop Off Point
+          {t("ADD_DROP_OFF_POINT")}
         </Button>
       </DialogTrigger>
       <DialogContent>
         <form onSubmit={handleSubmit(onSubmit)}>
           <DialogHeader>
-            <DialogTitle>Add Drop Off Point</DialogTitle>
+            <DialogTitle>{t("ADD_DROP_OFF_POINT")}</DialogTitle>
           </DialogHeader>
           <DialogBody>
-            <Text mb={4}>Fill in the details to add a new drop off point.</Text>
+            <Text mb={4}>{t("FILL_IN_THE_DETAILS_TO_ADD_A_NEW_DROP_OFF_POINT")}</Text>
             <VStack gap={4}>
               <Field
                 required
                 invalid={!!errors.title}
                 errorText={errors.title?.message}
-                label="Title"
+                label={t("TITLE")}
               >
                 <Input
                   id="title"
                   {...register("title", {
-                    required: "Title is required.",
+                    required: t("TITLE_REQUIRED"),
                   })}
-                  placeholder="Title"
+                  placeholder={t("TITLE")}
                   type="text"
                 />
               </Field>
@@ -140,32 +142,32 @@ const AddDropOffPoint = () => {
               <Field
                 invalid={!!errors.description}
                 errorText={errors.description?.message}
-                label="Description"
+                label={t("DESCRIPTION")}
               >
                 <Textarea
                   id="description"
                   {...register("description")}
-                  placeholder="Description"
+                  placeholder={t("DESCRIPTION")}
                 />
               </Field>
 
               <Field
                 invalid={!!errors.address}
                 errorText={errors.address?.message}
-                label="Address"
+                label={t("ADDRESS")}
               >
                 <AddressInputAutocomplete
                   id="address"
                   value={address || ""}
                   onChange={(value) => setValue("address", value)}
-                  placeholder="Address"
+                  placeholder={t("ADDRESS")}
                 />
               </Field>
               {currentUser?.is_organization && membersCollection && (
                 <Field
                   invalid={!!errors.responsible_id}
                   errorText={errors.responsible_id?.message}
-                  label="Responsible"
+                  label={t("RESPONSIBLE")}
                 >
                   <Select.Root
                     collection={membersCollection}
@@ -176,16 +178,16 @@ const AddDropOffPoint = () => {
                   >
                     <Select.Control>
                       <Select.Trigger>
-                        <Select.ValueText placeholder="Select responsible" />
+                        <Select.ValueText placeholder={t("SELECT_RESPONSIBLE")} />
                       </Select.Trigger>
                     </Select.Control>
                     <Select.Positioner>
                       <Select.Content>
                         <Select.Item
                           key="none"
-                          item={{ value: "", label: "None" }}
+                          item={{ value: "", label: t("NONE") }}
                         >
-                          None
+                          {t("NONE")}
                         </Select.Item>
                         {membersCollection?.items.map((member) => (
                           <Select.Item key={member.value} item={member}>
@@ -207,7 +209,7 @@ const AddDropOffPoint = () => {
                 colorPalette="gray"
                 disabled={isSubmitting}
               >
-                Cancel
+                {t("CANCEL")}
               </Button>
             </DialogActionTrigger>
             <Button
@@ -216,7 +218,7 @@ const AddDropOffPoint = () => {
               disabled={!isValid}
               loading={isSubmitting}
             >
-              Save
+              {t("SAVE")}
             </Button>
           </DialogFooter>
         </form>

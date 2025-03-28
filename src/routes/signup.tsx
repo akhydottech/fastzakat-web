@@ -15,6 +15,7 @@ import { PasswordInput } from "@/components/ui/password-input"
 import useAuth, { isLoggedIn } from "@/hooks/useAuth"
 import { confirmPasswordRules, emailPattern, passwordRules } from "@/utils"
 import Logo from "/assets/images/fastapi-logo.svg"
+import { useTranslation } from "react-i18next";
 
 export const Route = createFileRoute("/signup")({
   component: SignUp,
@@ -32,6 +33,7 @@ interface UserRegisterForm extends UserRegister {
 }
 
 function SignUp() {
+  const { t } = useTranslation();
   const { signUpMutation } = useAuth()
   const {
     register,
@@ -82,9 +84,9 @@ function SignUp() {
                 id="full_name"
                 minLength={3}
                 {...register("full_name", {
-                  required: "Full Name is required",
+                  required: t("FULL_NAME_REQUIRED"),
                 })}
-                placeholder="Full Name"
+                placeholder={t("FULL_NAME")}
                 type="text"
               />
             </InputGroup>
@@ -95,10 +97,10 @@ function SignUp() {
               <Input
                 id="email"
                 {...register("email", {
-                  required: "Email is required",
+                  required: t("USERNAME_REQUIRED"),
                   pattern: emailPattern,
                 })}
-                placeholder="Email"
+                placeholder={t("EMAIL")}
                 type="email"
               />
             </InputGroup>
@@ -106,24 +108,24 @@ function SignUp() {
           <PasswordInput
             type="password"
             startElement={<FiLock />}
-            {...register("password", passwordRules())}
-            placeholder="Password"
+            {...register("password", passwordRules(true, t))}
+            placeholder={t("PASSWORD")}
             errors={errors}
           />
           <PasswordInput
             type="confirm_password"
             startElement={<FiLock />}
-            {...register("confirm_password", confirmPasswordRules(getValues))}
-            placeholder="Confirm Password"
+            {...register("confirm_password", confirmPasswordRules(getValues, true, t))}
+            placeholder={t("CONFIRM_PASSWORD")}
             errors={errors}
           />
           <Button variant="solid" type="submit" loading={isSubmitting}>
-            Sign Up
+            {t("SIGN_UP")}
           </Button>
           <Text>
-            Already have an account?{" "}
+            {t("ALREADY_HAVE_ACCOUNT")}{" "}
             <RouterLink to="/login" className="main-link">
-              Log In
+              {t("LOGIN")}
             </RouterLink>
           </Text>
         </Container>

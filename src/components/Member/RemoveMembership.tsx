@@ -16,8 +16,9 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import useCustomToast from "@/hooks/useCustomToast"
-
+import { useTranslation } from "react-i18next"
 const RemoveMembership = ({ id }: { id: string }) => {
+  const { t } = useTranslation()
   const [isOpen, setIsOpen] = useState(false)
   const queryClient = useQueryClient()
   const { showSuccessToast, showErrorToast } = useCustomToast()
@@ -33,11 +34,11 @@ const RemoveMembership = ({ id }: { id: string }) => {
   const mutation = useMutation({
     mutationFn: removeMembership,
     onSuccess: () => {
-      showSuccessToast("The membership was removed successfully")
+      showSuccessToast(t("MEMBERSHIP_REMOVED_SUCCESSFULLY"))
       setIsOpen(false)
     },
     onError: () => {
-      showErrorToast("An error occurred while removing the membership")
+      showErrorToast(t("AN_ERROR_OCCURRED_WHILE_REMOVING_THE_MEMBERSHIP"))
     },
     onSettled: () => {
       queryClient.invalidateQueries()
@@ -59,17 +60,17 @@ const RemoveMembership = ({ id }: { id: string }) => {
       <DialogTrigger asChild>
         <Button variant="ghost" size="sm" colorPalette="red">
           <FiTrash2 fontSize="16px" />
-          Remove Membership
+          {t("REMOVE_MEMBERSHIP")}
         </Button>
       </DialogTrigger>
       <DialogContent>
         <form onSubmit={handleSubmit(onSubmit)}>
           <DialogHeader>
-            <DialogTitle>Remove Membership</DialogTitle>
+            <DialogTitle>{t("REMOVE_MEMBERSHIP")}</DialogTitle>
           </DialogHeader>
           <DialogBody>
             <Text mb={4}>
-              Are you sure you want to remove this membership? This action cannot be undone.
+              {t("REMOVE_MEMBERSHIP_CONFIRMATION")}
             </Text>
           </DialogBody>
 
@@ -80,7 +81,7 @@ const RemoveMembership = ({ id }: { id: string }) => {
                 colorPalette="gray"
                 disabled={isSubmitting}
               >
-                Cancel
+                {t("CANCEL")}
               </Button>
             </DialogActionTrigger>
             <Button
@@ -89,7 +90,7 @@ const RemoveMembership = ({ id }: { id: string }) => {
               type="submit"
               loading={isSubmitting}
             >
-              Remove
+              {t("REMOVE")}
             </Button>
           </DialogFooter>
           <DialogCloseTrigger />

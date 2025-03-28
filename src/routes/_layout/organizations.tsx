@@ -6,6 +6,7 @@ import { MembersService } from "@/client"
 import ActivateMembership from "@/components/Member/ActivateMembership"
 import DeleteOrganization from "@/components/Member/RemoveMembership"
 import PendingUsers from "@/components/Pending/PendingUsers"
+import { useTranslation } from "react-i18next"
 
 function getUsersQueryOptions() {
   return {
@@ -20,6 +21,7 @@ export const Route = createFileRoute("/_layout/organizations")({
 })
 
 function OrganizationsTable() {
+  const { t } = useTranslation()
   const { data, isLoading } = useQuery({
     ...getUsersQueryOptions(),
   })
@@ -36,10 +38,10 @@ function OrganizationsTable() {
       <Table.Root size={{ base: "sm", md: "md" }}>
         <Table.Header>
           <Table.Row>
-            <Table.ColumnHeader w="sm">Organization Name</Table.ColumnHeader>
-            <Table.ColumnHeader w="sm">Email</Table.ColumnHeader>
-            <Table.ColumnHeader w="sm">Is Pending</Table.ColumnHeader>
-            <Table.ColumnHeader w="sm">Actions</Table.ColumnHeader>
+            <Table.ColumnHeader w="sm">{t("ORGANIZATION_NAME")}</Table.ColumnHeader>
+            <Table.ColumnHeader w="sm">{t("EMAIL")}</Table.ColumnHeader>
+            <Table.ColumnHeader w="sm">{t("IS_PENDING")}</Table.ColumnHeader>
+            <Table.ColumnHeader w="sm">{t("ACTIONS")}</Table.ColumnHeader>
           </Table.Row>
         </Table.Header>
         <Table.Body>
@@ -51,7 +53,7 @@ function OrganizationsTable() {
               <Table.Cell truncate maxW="sm">
                 {organization.email}
               </Table.Cell>
-              <Table.Cell>{organization.is_pending ? "Pending" : "Active"}</Table.Cell>
+              <Table.Cell>{organization.is_pending ? t("PENDING") : t("ACTIVE")}</Table.Cell>
               <Table.Cell>
                 {organization.is_pending && (
                   <ActivateMembership invitationId={organization.id} />
@@ -67,10 +69,11 @@ function OrganizationsTable() {
 }
 
 function Organizations() {
+  const { t } = useTranslation()
   return (
     <Container maxW="full">
       <Heading size="lg" pt={12}>
-        Organizations
+        {t("ORGANIZATIONS")}
       </Heading>
       <OrganizationsTable />
     </Container>

@@ -29,7 +29,7 @@ import {
 } from "../ui/dialog"
 import { Field } from "../ui/field"
 import AddressInputAutocomplete from "@/components/Common/address-input-autocomplete"
-
+import { useTranslation } from "react-i18next"
 interface EditDropOffPointProps {
   item: DropOffPointPublic
 }
@@ -42,6 +42,7 @@ interface DropOffPointUpdateForm {
 }
 
 const EditDropOffPoint = ({ item }: EditDropOffPointProps) => {
+  const { t } = useTranslation()
   const [isOpen, setIsOpen] = useState(false)
   const queryClient = useQueryClient()
   const currentUser = queryClient.getQueryData<UserPublic>(["currentUser"])
@@ -123,29 +124,29 @@ const EditDropOffPoint = ({ item }: EditDropOffPointProps) => {
       <DialogTrigger asChild>
         <Button variant="ghost">
           <FaExchangeAlt fontSize="16px" />
-          Edit Drop Off Point
+          {t("EDIT_DROP_OFF_POINT")}
         </Button>
       </DialogTrigger>
       <DialogContent>
         <form onSubmit={handleSubmit(onSubmit)}>
           <DialogHeader>
-            <DialogTitle>Edit Drop Off Point</DialogTitle>
+            <DialogTitle>{t("EDIT_DROP_OFF_POINT")}</DialogTitle>
           </DialogHeader>
           <DialogBody>
-            <Text mb={4}>Update the drop off point details below.</Text>
+            <Text mb={4}>{t("EDIT_DROP_OFF_POINT_DESCRIPTION")}</Text>
             <VStack gap={4}>
               <Field
                 required
                 invalid={!!errors.title}
                 errorText={errors.title?.message}
-                label="Title"
+                label={t("TITLE")}
               >
                 <Input
                   id="title"
                   {...register("title", {
-                    required: "Title is required",
+                    required: t("TITLE_REQUIRED"),
                   })}
-                  placeholder="Title"
+                  placeholder={t("TITLE")}
                   type="text"
                 />
               </Field>
@@ -153,25 +154,25 @@ const EditDropOffPoint = ({ item }: EditDropOffPointProps) => {
               <Field
                 invalid={!!errors.description}
                 errorText={errors.description?.message}
-                label="Description"
+                label={t("DESCRIPTION")}
               >
                 <Textarea
                   id="description"
                   {...register("description")}
-                  placeholder="Description"
+                  placeholder={t("DESCRIPTION")}
                 />
               </Field>
 
               <Field
                 invalid={!!errors.address}
                 errorText={errors.address?.message}
-                label="Address"
+                label={t("ADDRESS")}
               >
                 <AddressInputAutocomplete
                   id="address"
                   value={address || ""}
                   onChange={(value) => setValue("address", value)}
-                  placeholder="Address"
+                  placeholder={t("ADDRESS")}
                 />
               </Field>
 
@@ -179,7 +180,7 @@ const EditDropOffPoint = ({ item }: EditDropOffPointProps) => {
                 <Field
                   invalid={!!errors.responsible_id}
                   errorText={errors.responsible_id?.message}
-                  label="Responsible"
+                  label={t("RESPONSIBLE")}
                 >
                   <Select.Root
                     collection={membersCollection}
@@ -190,16 +191,16 @@ const EditDropOffPoint = ({ item }: EditDropOffPointProps) => {
                   >
                     <Select.Control>
                       <Select.Trigger>
-                        <Select.ValueText placeholder="Select responsible" />
+                        <Select.ValueText placeholder={t("SELECT_RESPONSIBLE")} />
                       </Select.Trigger>
                     </Select.Control>
                     <Select.Positioner>
                       <Select.Content>
                         <Select.Item
                           key="none"
-                          item={{ value: "", label: "None" }}
+                          item={{ value: "", label: t("NONE") }}
                         >
-                          None
+                          {t("NONE")}
                         </Select.Item>
                         {membersCollection?.items.map((member) => (
                           <Select.Item key={member.value} item={member}>
@@ -222,11 +223,11 @@ const EditDropOffPoint = ({ item }: EditDropOffPointProps) => {
                   colorPalette="gray"
                   disabled={isSubmitting}
                 >
-                  Cancel
+                  {t("CANCEL")}
                 </Button>
               </DialogActionTrigger>
               <Button variant="solid" type="submit" loading={isSubmitting}>
-                Save
+                {t("SAVE")}
               </Button>
             </ButtonGroup>
           </DialogFooter>

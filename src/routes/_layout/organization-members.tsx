@@ -6,6 +6,7 @@ import { OrganizationsService, UserPublic } from "@/client"
 import AddMember from "@/components/Organization/AddMember"
 import DeleteMember from "@/components/Organization/DeleteMember"
 import PendingUsers from "@/components/Pending/PendingUsers"
+import { useTranslation } from "react-i18next"
 
 function getUsersQueryOptions() {
   return {
@@ -20,6 +21,7 @@ export const Route = createFileRoute("/_layout/organization-members")({
 })
 
 function OrganizationMembersTable() {
+  const { t } = useTranslation()
   const queryClient = useQueryClient()
   const currentUser = queryClient.getQueryData<UserPublic>(["currentUser"])
 
@@ -39,10 +41,10 @@ function OrganizationMembersTable() {
       <Table.Root size={{ base: "sm", md: "md" }}>
         <Table.Header>
           <Table.Row>
-            <Table.ColumnHeader w="sm">Full name</Table.ColumnHeader>
-            <Table.ColumnHeader w="sm">Email</Table.ColumnHeader>
-            <Table.ColumnHeader w="sm">Is Pending</Table.ColumnHeader>
-            <Table.ColumnHeader w="sm">Actions</Table.ColumnHeader>
+            <Table.ColumnHeader w="sm">{t("FULL_NAME")}</Table.ColumnHeader>
+            <Table.ColumnHeader w="sm">{t("EMAIL")}</Table.ColumnHeader>
+            <Table.ColumnHeader w="sm">{t("IS_PENDING")}</Table.ColumnHeader>
+            <Table.ColumnHeader w="sm">{t("ACTIONS")}</Table.ColumnHeader>
           </Table.Row>
         </Table.Header>
         <Table.Body>
@@ -52,14 +54,14 @@ function OrganizationMembersTable() {
                 {member.full_name || "N/A"}
                 {currentUser?.id === member.id && (
                   <Badge ml="1" colorScheme="teal">
-                    You
+                    {t("YOU")}
                   </Badge>
                 )}
               </Table.Cell>
               <Table.Cell truncate maxW="sm">
                 {member.email}
               </Table.Cell>
-              <Table.Cell>{member.is_pending ? "Pending" : "Active"}</Table.Cell>
+              <Table.Cell>{member.is_pending ? t("IS_PENDING") : t("ACTIVE")}</Table.Cell>
               <Table.Cell>
                 <DeleteMember id={member.id} />
               </Table.Cell>
@@ -72,12 +74,12 @@ function OrganizationMembersTable() {
 }
 
 function OrganizationMembers() {
+  const { t } = useTranslation()
   return (
     <Container maxW="full">
       <Heading size="lg" pt={12}>
-        Users Management
+        {t("MEMBERS_MANAGEMENT")}
       </Heading>
-
       <AddMember />
       <OrganizationMembersTable />
     </Container>
