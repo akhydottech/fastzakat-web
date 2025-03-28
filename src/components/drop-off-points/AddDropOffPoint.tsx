@@ -1,5 +1,5 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { type SubmitHandler, useForm } from "react-hook-form"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { type SubmitHandler, useForm } from "react-hook-form";
 
 import {
   Button,
@@ -9,14 +9,21 @@ import {
   Text,
   Textarea,
   VStack,
-} from "@chakra-ui/react"
-import { useState } from "react"
-import { FaPlus } from "react-icons/fa"
+  Select,
+  createListCollection,
+} from "@chakra-ui/react";
+import { useState } from "react";
+import { FaPlus } from "react-icons/fa";
 
-import { type DropOffPointCreate, DropOffPointsService } from "@/client"
-import type { ApiError } from "@/client/core/ApiError"
-import useCustomToast from "@/hooks/useCustomToast"
-import { handleError } from "@/utils"
+import {
+  type DropOffPointCreate,
+  DropOffPointsService,
+  OrganizationsService,
+  UserPublic,
+} from "@/client";
+import type { ApiError } from "@/client/core/ApiError";
+import useCustomToast from "@/hooks/useCustomToast";
+import { handleError } from "@/utils";
 import {
   DialogBody,
   DialogCloseTrigger,
@@ -25,14 +32,18 @@ import {
   DialogHeader,
   DialogRoot,
   DialogTrigger,
-} from "../ui/dialog"
-import { Field } from "../ui/field"
-import AddressInputAutocomplete from "@/components/Common/address-input-autocomplete"
+} from "../ui/dialog";
+import { Field } from "../ui/field";
+import AddressInputAutocomplete from "@/components/Common/address-input-autocomplete";
+import { useTranslation } from "react-i18next";
 
 const AddDropOffPoint = () => {
-  const [isOpen, setIsOpen] = useState(false)
-  const queryClient = useQueryClient()
-  const { showSuccessToast } = useCustomToast()
+  const { t } = useTranslation();
+  const queryClient = useQueryClient();
+  const currentUser = queryClient.getQueryData<UserPublic>(["currentUser"]);
+
+  const [isOpen, setIsOpen] = useState(false);
+  const { showSuccessToast } = useCustomToast();
   const {
     register,
     handleSubmit,
@@ -47,30 +58,49 @@ const AddDropOffPoint = () => {
       title: "",
       description: "",
       address: "",
+      responsible_id: null,
     },
-  })
+  });
 
-  const address = watch("address")
+  const address = watch("address");
+  const responsibleId = watch("responsible_id");
 
   const mutation = useMutation({
     mutationFn: (data: DropOffPointCreate) =>
       DropOffPointsService.createDropOffPoint({ requestBody: data }),
     onSuccess: () => {
-      showSuccessToast("Drop off point created successfully.")
-      reset()
-      setIsOpen(false)
+      showSuccessToast(t("DROP_OFF_POINT_CREATED_SUCCESSFULLY"));
+      reset();
+      setIsOpen(false);
     },
     onError: (err: ApiError) => {
-      handleError(err)
+      handleError(err);
     },
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["items"] })
+      queryClient.invalidateQueries({ queryKey: ["drop-off-points"] });
     },
-  })
+  });
+
+  let membersCollection;
+
+  const { data: members } = useQuery({
+    queryKey: ["members"],
+    queryFn: () => OrganizationsService.getMembers(),
+    enabled: !!currentUser?.is_organization,
+  });
+
+  if (currentUser?.is_organization && members?.data) {
+    membersCollection = createListCollection({
+      items: members.data.map((member) => ({
+        label: member.full_name || member.email,
+        value: member.id,
+      })),
+    });
+  }
 
   const onSubmit: SubmitHandler<DropOffPointCreate> = (data) => {
-    mutation.mutate(data)
-  }
+    mutation.mutate(data);
+  };
 
   return (
     <DialogRoot
@@ -82,29 +112,29 @@ const AddDropOffPoint = () => {
       <DialogTrigger asChild>
         <Button value="add-drop-off-point" my={4}>
           <FaPlus fontSize="16px" />
-          Add Drop Off Point
+          {t("ADD_DROP_OFF_POINT")}
         </Button>
       </DialogTrigger>
       <DialogContent>
         <form onSubmit={handleSubmit(onSubmit)}>
           <DialogHeader>
-            <DialogTitle>Add Drop Off Point</DialogTitle>
+            <DialogTitle>{t("ADD_DROP_OFF_POINT")}</DialogTitle>
           </DialogHeader>
           <DialogBody>
-            <Text mb={4}>Fill in the details to add a new drop off point.</Text>
+            <Text mb={4}>{t("FILL_IN_THE_DETAILS_TO_ADD_A_NEW_DROP_OFF_POINT")}</Text>
             <VStack gap={4}>
               <Field
                 required
                 invalid={!!errors.title}
                 errorText={errors.title?.message}
-                label="Title"
+                label={t("TITLE")}
               >
                 <Input
                   id="title"
                   {...register("title", {
-                    required: "Title is required.",
+                    required: t("TITLE_REQUIRED"),
                   })}
-                  placeholder="Title"
+                  placeholder={t("TITLE")}
                   type="text"
                 />
               </Field>
@@ -112,27 +142,63 @@ const AddDropOffPoint = () => {
               <Field
                 invalid={!!errors.description}
                 errorText={errors.description?.message}
-                label="Description"
+                label={t("DESCRIPTION")}
               >
                 <Textarea
                   id="description"
                   {...register("description")}
-                  placeholder="Description"
+                  placeholder={t("DESCRIPTION")}
                 />
               </Field>
 
               <Field
                 invalid={!!errors.address}
                 errorText={errors.address?.message}
-                label="Address"
+                label={t("ADDRESS")}
               >
                 <AddressInputAutocomplete
                   id="address"
                   value={address || ""}
                   onChange={(value) => setValue("address", value)}
-                  placeholder="Address"
+                  placeholder={t("ADDRESS")}
                 />
               </Field>
+              {currentUser?.is_organization && membersCollection && (
+                <Field
+                  invalid={!!errors.responsible_id}
+                  errorText={errors.responsible_id?.message}
+                  label={t("RESPONSIBLE")}
+                >
+                  <Select.Root
+                    collection={membersCollection}
+                    value={responsibleId ? [responsibleId] : []}
+                    onValueChange={({ value }) =>
+                      setValue("responsible_id", value[0] || null)
+                    }
+                  >
+                    <Select.Control>
+                      <Select.Trigger>
+                        <Select.ValueText placeholder={t("SELECT_RESPONSIBLE")} />
+                      </Select.Trigger>
+                    </Select.Control>
+                    <Select.Positioner>
+                      <Select.Content>
+                        <Select.Item
+                          key="none"
+                          item={{ value: "", label: t("NONE") }}
+                        >
+                          {t("NONE")}
+                        </Select.Item>
+                        {membersCollection?.items.map((member) => (
+                          <Select.Item key={member.value} item={member}>
+                            {member.label}
+                          </Select.Item>
+                        ))}
+                      </Select.Content>
+                    </Select.Positioner>
+                  </Select.Root>
+                </Field>
+              )}
             </VStack>
           </DialogBody>
 
@@ -143,7 +209,7 @@ const AddDropOffPoint = () => {
                 colorPalette="gray"
                 disabled={isSubmitting}
               >
-                Cancel
+                {t("CANCEL")}
               </Button>
             </DialogActionTrigger>
             <Button
@@ -152,14 +218,14 @@ const AddDropOffPoint = () => {
               disabled={!isValid}
               loading={isSubmitting}
             >
-              Save
+              {t("SAVE")}
             </Button>
           </DialogFooter>
         </form>
         <DialogCloseTrigger />
       </DialogContent>
     </DialogRoot>
-  )
-}
+  );
+};
 
-export default AddDropOffPoint
+export default AddDropOffPoint;

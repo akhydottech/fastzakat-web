@@ -4,7 +4,7 @@ import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { FiTrash2 } from "react-icons/fi"
 
-import { UsersService } from "@/client"
+import { MembersService } from "@/client"
 import {
   DialogActionTrigger,
   DialogBody,
@@ -17,8 +17,7 @@ import {
 } from "@/components/ui/dialog"
 import useCustomToast from "@/hooks/useCustomToast"
 import { useTranslation } from "react-i18next"
-
-const DeleteUser = ({ id }: { id: string }) => {
+const RemoveMembership = ({ id }: { id: string }) => {
   const { t } = useTranslation()
   const [isOpen, setIsOpen] = useState(false)
   const queryClient = useQueryClient()
@@ -28,18 +27,18 @@ const DeleteUser = ({ id }: { id: string }) => {
     formState: { isSubmitting },
   } = useForm()
 
-  const deleteUser = async (id: string) => {
-    await UsersService.deleteUser({ userId: id })
+  const removeMembership = async (id: string) => {
+    await MembersService.deleteOrganization({ memberId: id })
   }
 
   const mutation = useMutation({
-    mutationFn: deleteUser,
+    mutationFn: removeMembership,
     onSuccess: () => {
-      showSuccessToast(t("USER_DELETED_SUCCESSFULLY"))
+      showSuccessToast(t("MEMBERSHIP_REMOVED_SUCCESSFULLY"))
       setIsOpen(false)
     },
     onError: () => {
-      showErrorToast(t("USER_DELETION_ERROR"))
+      showErrorToast(t("AN_ERROR_OCCURRED_WHILE_REMOVING_THE_MEMBERSHIP"))
     },
     onSettled: () => {
       queryClient.invalidateQueries()
@@ -61,17 +60,17 @@ const DeleteUser = ({ id }: { id: string }) => {
       <DialogTrigger asChild>
         <Button variant="ghost" size="sm" colorPalette="red">
           <FiTrash2 fontSize="16px" />
-          {t("DELETE_USER")}
+          {t("REMOVE_MEMBERSHIP")}
         </Button>
       </DialogTrigger>
       <DialogContent>
         <form onSubmit={handleSubmit(onSubmit)}>
           <DialogHeader>
-            <DialogTitle>{t("DELETE_USER")}</DialogTitle>
+            <DialogTitle>{t("REMOVE_MEMBERSHIP")}</DialogTitle>
           </DialogHeader>
           <DialogBody>
             <Text mb={4}>
-              {t("DELETE_USER_CONFIRMATION")}
+              {t("REMOVE_MEMBERSHIP_CONFIRMATION")}
             </Text>
           </DialogBody>
 
@@ -91,7 +90,7 @@ const DeleteUser = ({ id }: { id: string }) => {
               type="submit"
               loading={isSubmitting}
             >
-              {t("DELETE")}
+              {t("REMOVE")}
             </Button>
           </DialogFooter>
           <DialogCloseTrigger />
@@ -101,4 +100,4 @@ const DeleteUser = ({ id }: { id: string }) => {
   )
 }
 
-export default DeleteUser
+export default RemoveMembership

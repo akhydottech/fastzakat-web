@@ -21,8 +21,10 @@ import useAuth from "@/hooks/useAuth"
 import useCustomToast from "@/hooks/useCustomToast"
 import { emailPattern, handleError } from "@/utils"
 import { Field } from "../ui/field"
+import { useTranslation } from "react-i18next"
 
 const UserInformation = () => {
+  const { t } = useTranslation()
   const queryClient = useQueryClient()
   const { showSuccessToast } = useCustomToast()
   const [editMode, setEditMode] = useState(false)
@@ -32,6 +34,7 @@ const UserInformation = () => {
     handleSubmit,
     reset,
     getValues,
+    setValue,
     formState: { isSubmitting, errors, isDirty },
   } = useForm<UserPublic>({
     mode: "onBlur",
@@ -39,6 +42,7 @@ const UserInformation = () => {
     defaultValues: {
       full_name: currentUser?.full_name,
       email: currentUser?.email,
+      is_organization: currentUser?.is_organization,
     },
   })
 
@@ -49,8 +53,14 @@ const UserInformation = () => {
   const mutation = useMutation({
     mutationFn: (data: UserUpdateMe) =>
       UsersService.updateUserMe({ requestBody: data }),
-    onSuccess: () => {
-      showSuccessToast("User updated successfully.")
+    onSuccess: (data) => {
+      reset({
+        full_name: data.full_name,
+        email: data.email,
+        is_organization: data.is_organization,
+      })
+      setEditMode(false)
+      showSuccessToast(t("USER_UPDATED_SUCCESSFULLY"))
     },
     onError: (err: ApiError) => {
       handleError(err)
@@ -73,14 +83,14 @@ const UserInformation = () => {
     <>
       <Container maxW="full">
         <Heading size="sm" py={4}>
-          User Information
+          {t("USER_INFORMATION")}
         </Heading>
         <Box
           w={{ sm: "full", md: "sm" }}
           as="form"
           onSubmit={handleSubmit(onSubmit)}
         >
-          <Field label="Full name">
+          <Field label={t("FULL_NAME")}>
             {editMode ? (
               <Input
                 {...register("full_name", { maxLength: 30 })}
@@ -108,7 +118,7 @@ const UserInformation = () => {
             {editMode ? (
               <Input
                 {...register("email", {
-                  required: "Email is required",
+                  required: t("EMAIL_REQUIRED"),
                   pattern: emailPattern,
                 })}
                 type="email"
@@ -120,6 +130,27 @@ const UserInformation = () => {
               </Text>
             )}
           </Field>
+          <Field mt={4} label={t("ORGANIZATION_ACCOUNT")}>
+            {editMode ? (
+              <Button
+                variant={getValues("is_organization") ? "solid" : "outline"}
+                onClick={() => {
+                  const currentValue = getValues("is_organization")
+                  setValue("is_organization", !currentValue, {
+                    shouldDirty: true,
+                    shouldValidate: true,
+                  })
+                }}
+                size="md"
+              >
+                {getValues("is_organization") ? t("YES") : t("NO")}
+              </Button>
+            ) : (
+              <Text fontSize="md" color={!currentUser?.is_organization ? "gray" : "inherit"}>
+                {currentUser?.is_organization ? t("YES") : t("NO")}
+              </Text>
+            )}
+          </Field>
           <Flex mt={4} gap={3}>
             <Button
               variant="solid"
@@ -128,7 +159,7 @@ const UserInformation = () => {
               loading={editMode ? isSubmitting : false}
               disabled={editMode ? !isDirty || !getValues("email") : false}
             >
-              {editMode ? "Save" : "Edit"}
+              {editMode ? t("SAVE") : t("EDIT")}
             </Button>
             {editMode && (
               <Button
@@ -137,7 +168,7 @@ const UserInformation = () => {
                 onClick={onCancel}
                 disabled={isSubmitting}
               >
-                Cancel
+                {t("CANCEL")}
               </Button>
             )}
           </Flex>

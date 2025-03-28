@@ -10,6 +10,7 @@ import { PasswordInput } from "@/components/ui/password-input"
 import { isLoggedIn } from "@/hooks/useAuth"
 import useCustomToast from "@/hooks/useCustomToast"
 import { confirmPasswordRules, handleError, passwordRules } from "@/utils"
+import { useTranslation } from "react-i18next"
 
 interface NewPasswordForm extends NewPassword {
   confirm_password: string
@@ -27,6 +28,7 @@ export const Route = createFileRoute("/reset-password")({
 })
 
 function ResetPassword() {
+  const { t } = useTranslation()
   const {
     register,
     handleSubmit,
@@ -54,7 +56,7 @@ function ResetPassword() {
   const mutation = useMutation({
     mutationFn: resetPassword,
     onSuccess: () => {
-      showSuccessToast("Password updated successfully.")
+      showSuccessToast(t("PASSWORD_UPDATED_SUCCESSFULLY"))
       reset()
       navigate({ to: "/login" })
     },
@@ -79,27 +81,27 @@ function ResetPassword() {
       centerContent
     >
       <Heading size="xl" color="ui.main" textAlign="center" mb={2}>
-        Reset Password
+        {t("RESET_PASSWORD")}
       </Heading>
       <Text textAlign="center">
-        Please enter your new password and confirm it to reset your password.
+        {t("RESET_PASSWORD_DESCRIPTION")}
       </Text>
       <PasswordInput
         startElement={<FiLock />}
         type="new_password"
         errors={errors}
-        {...register("new_password", passwordRules())}
-        placeholder="New Password"
+        {...register("new_password", passwordRules(true, t))}
+        placeholder={t("NEW_PASSWORD")}
       />
       <PasswordInput
         startElement={<FiLock />}
         type="confirm_password"
         errors={errors}
-        {...register("confirm_password", confirmPasswordRules(getValues))}
-        placeholder="Confirm Password"
+        {...register("confirm_password", confirmPasswordRules(getValues, true, t))}
+        placeholder={t("CONFIRM_PASSWORD")}
       />
       <Button variant="solid" type="submit">
-        Reset Password
+        {t("RESET_PASSWORD")}
       </Button>
     </Container>
   )

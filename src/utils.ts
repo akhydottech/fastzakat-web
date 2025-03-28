@@ -1,3 +1,4 @@
+import { TFunction } from "i18next"
 import type { ApiError } from "./client"
 import useCustomToast from "./hooks/useCustomToast"
 
@@ -11,16 +12,16 @@ export const namePattern = {
   message: "Invalid name",
 }
 
-export const passwordRules = (isRequired = true) => {
+export const passwordRules = (isRequired = true, t: TFunction) => {
   const rules: any = {
     minLength: {
       value: 8,
-      message: "Password must be at least 8 characters",
+      message: t("PASSWORD_MIN_LENGTH"),
     },
   }
 
   if (isRequired) {
-    rules.required = "Password is required"
+    rules.required = t("PASSWORD_REQUIRED")
   }
 
   return rules
@@ -29,16 +30,17 @@ export const passwordRules = (isRequired = true) => {
 export const confirmPasswordRules = (
   getValues: () => any,
   isRequired = true,
+  t: TFunction
 ) => {
   const rules: any = {
     validate: (value: string) => {
       const password = getValues().password || getValues().new_password
-      return value === password ? true : "The passwords do not match"
+      return value === password ? true : t("PASSWORD_DO_NOT_MATCH")
     },
   }
 
   if (isRequired) {
-    rules.required = "Password confirmation is required"
+    rules.required = t("CONFIRM_PASSWORD_REQUIRED")
   }
 
   return rules

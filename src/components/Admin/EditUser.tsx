@@ -28,7 +28,7 @@ import {
   DialogTitle,
 } from "../ui/dialog"
 import { Field } from "../ui/field"
-
+import { useTranslation } from "react-i18next"
 interface EditUserProps {
   user: UserPublic
 }
@@ -38,6 +38,7 @@ interface UserUpdateForm extends UserUpdate {
 }
 
 const EditUser = ({ user }: EditUserProps) => {
+  const { t } = useTranslation()
   const [isOpen, setIsOpen] = useState(false)
   const queryClient = useQueryClient()
   const { showSuccessToast } = useCustomToast()
@@ -58,7 +59,7 @@ const EditUser = ({ user }: EditUserProps) => {
     mutationFn: (data: UserUpdateForm) =>
       UsersService.updateUser({ userId: user.id, requestBody: data }),
     onSuccess: () => {
-      showSuccessToast("User updated successfully.")
+      showSuccessToast(t("USER_UPDATED_SUCCESSFULLY"))
       reset()
       setIsOpen(false)
     },
@@ -87,30 +88,30 @@ const EditUser = ({ user }: EditUserProps) => {
       <DialogTrigger asChild>
         <Button variant="ghost" size="sm">
           <FaExchangeAlt fontSize="16px" />
-          Edit User
+          {t("EDIT_USER")}
         </Button>
       </DialogTrigger>
       <DialogContent>
         <form onSubmit={handleSubmit(onSubmit)}>
           <DialogHeader>
-            <DialogTitle>Edit User</DialogTitle>
+            <DialogTitle>{t("EDIT_USER")}</DialogTitle>
           </DialogHeader>
           <DialogBody>
-            <Text mb={4}>Update the user details below.</Text>
+            <Text mb={4}>{t("EDIT_USER_DESCRIPTION")}</Text>
             <VStack gap={4}>
               <Field
                 required
                 invalid={!!errors.email}
                 errorText={errors.email?.message}
-                label="Email"
+                label={t("EMAIL")}
               >
                 <Input
                   id="email"
                   {...register("email", {
-                    required: "Email is required",
+                    required: t("EMAIL_REQUIRED"),
                     pattern: emailPattern,
                   })}
-                  placeholder="Email"
+                  placeholder={t("EMAIL")}
                   type="email"
                 />
               </Field>
@@ -118,12 +119,12 @@ const EditUser = ({ user }: EditUserProps) => {
               <Field
                 invalid={!!errors.full_name}
                 errorText={errors.full_name?.message}
-                label="Full Name"
+                label={t("FULL_NAME")}
               >
                 <Input
                   id="name"
                   {...register("full_name")}
-                  placeholder="Full name"
+                  placeholder={t("FULL_NAME")}
                   type="text"
                 />
               </Field>
@@ -131,17 +132,17 @@ const EditUser = ({ user }: EditUserProps) => {
               <Field
                 invalid={!!errors.password}
                 errorText={errors.password?.message}
-                label="Set Password"
+                label={t("SET_PASSWORD")}
               >
                 <Input
                   id="password"
                   {...register("password", {
                     minLength: {
                       value: 8,
-                      message: "Password must be at least 8 characters",
+                      message: t("PASSWORD_MIN_LENGTH"),
                     },
                   })}
-                  placeholder="Password"
+                  placeholder={t("PASSWORD")}
                   type="password"
                 />
               </Field>
@@ -149,16 +150,16 @@ const EditUser = ({ user }: EditUserProps) => {
               <Field
                 invalid={!!errors.confirm_password}
                 errorText={errors.confirm_password?.message}
-                label="Confirm Password"
+                label={t("CONFIRM_PASSWORD")}
               >
                 <Input
                   id="confirm_password"
                   {...register("confirm_password", {
                     validate: (value) =>
                       value === getValues().password ||
-                      "The passwords do not match",
+                      t("PASSWORD_DO_NOT_MATCH"),
                   })}
-                  placeholder="Password"
+                  placeholder={t("PASSWORD")}
                   type="password"
                 />
               </Field>
@@ -174,7 +175,7 @@ const EditUser = ({ user }: EditUserProps) => {
                       checked={field.value}
                       onCheckedChange={({ checked }) => field.onChange(checked)}
                     >
-                      Is superuser?
+                      {t("IS_SUPERUSER")}
                     </Checkbox>
                   </Field>
                 )}
@@ -188,7 +189,7 @@ const EditUser = ({ user }: EditUserProps) => {
                       checked={field.value}
                       onCheckedChange={({ checked }) => field.onChange(checked)}
                     >
-                      Is active?
+                      {t("IS_ACTIVE")}
                     </Checkbox>
                   </Field>
                 )}
@@ -203,11 +204,11 @@ const EditUser = ({ user }: EditUserProps) => {
                 colorPalette="gray"
                 disabled={isSubmitting}
               >
-                Cancel
+                {t("CANCEL")}
               </Button>
             </DialogActionTrigger>
             <Button variant="solid" type="submit" loading={isSubmitting}>
-              Save
+              {t("SAVE")}
             </Button>
           </DialogFooter>
           <DialogCloseTrigger />

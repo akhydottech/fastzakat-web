@@ -27,12 +27,14 @@ import {
   DialogTrigger,
 } from "../ui/dialog"
 import { Field } from "../ui/field"
+import { useTranslation } from "react-i18next"
 
 interface UserCreateForm extends UserCreate {
   confirm_password: string
 }
 
 const AddUser = () => {
+  const { t } = useTranslation()
   const [isOpen, setIsOpen] = useState(false)
   const queryClient = useQueryClient()
   const { showSuccessToast } = useCustomToast()
@@ -86,32 +88,32 @@ const AddUser = () => {
       <DialogTrigger asChild>
         <Button value="add-user" my={4}>
           <FaPlus fontSize="16px" />
-          Add User
+          {t("ADD_USER")}
         </Button>
       </DialogTrigger>
       <DialogContent>
         <form onSubmit={handleSubmit(onSubmit)}>
           <DialogHeader>
-            <DialogTitle>Add User</DialogTitle>
+            <DialogTitle>{t("ADD_USER")}</DialogTitle>
           </DialogHeader>
           <DialogBody>
             <Text mb={4}>
-              Fill in the form below to add a new user to the system.
+              {t("ADD_USER_DESCRIPTION")}
             </Text>
             <VStack gap={4}>
               <Field
                 required
                 invalid={!!errors.email}
                 errorText={errors.email?.message}
-                label="Email"
+                label={t("EMAIL")}
               >
                 <Input
                   id="email"
                   {...register("email", {
-                    required: "Email is required",
+                    required: t("EMAIL_REQUIRED"),
                     pattern: emailPattern,
                   })}
-                  placeholder="Email"
+                  placeholder={t("EMAIL")}
                   type="email"
                 />
               </Field>
@@ -119,12 +121,12 @@ const AddUser = () => {
               <Field
                 invalid={!!errors.full_name}
                 errorText={errors.full_name?.message}
-                label="Full Name"
+                label={t("FULL_NAME")}
               >
                 <Input
                   id="name"
                   {...register("full_name")}
-                  placeholder="Full name"
+                  placeholder={t("FULL_NAME")}
                   type="text"
                 />
               </Field>
@@ -133,18 +135,18 @@ const AddUser = () => {
                 required
                 invalid={!!errors.password}
                 errorText={errors.password?.message}
-                label="Set Password"
+                label={t("SET_PASSWORD")}
               >
                 <Input
                   id="password"
                   {...register("password", {
-                    required: "Password is required",
+                    required: t("PASSWORD_REQUIRED"),
                     minLength: {
                       value: 8,
-                      message: "Password must be at least 8 characters",
+                      message: t("PASSWORD_MIN_LENGTH"),
                     },
                   })}
-                  placeholder="Password"
+                  placeholder={t("PASSWORD")}
                   type="password"
                 />
               </Field>
@@ -153,15 +155,15 @@ const AddUser = () => {
                 required
                 invalid={!!errors.confirm_password}
                 errorText={errors.confirm_password?.message}
-                label="Confirm Password"
+                label={t("CONFIRM_PASSWORD")}
               >
                 <Input
                   id="confirm_password"
                   {...register("confirm_password", {
-                    required: "Please confirm your password",
+                    required: t("CONFIRM_PASSWORD_REQUIRED"),
                     validate: (value) =>
                       value === getValues().password ||
-                      "The passwords do not match",
+                      t("PASSWORD_DO_NOT_MATCH"),
                   })}
                   placeholder="Password"
                   type="password"
@@ -179,7 +181,7 @@ const AddUser = () => {
                       checked={field.value}
                       onCheckedChange={({ checked }) => field.onChange(checked)}
                     >
-                      Is superuser?
+                      {t("IS_SUPERUSER")}
                     </Checkbox>
                   </Field>
                 )}
@@ -193,7 +195,7 @@ const AddUser = () => {
                       checked={field.value}
                       onCheckedChange={({ checked }) => field.onChange(checked)}
                     >
-                      Is active?
+                      {t("IS_ACTIVE")}
                     </Checkbox>
                   </Field>
                 )}
@@ -208,7 +210,7 @@ const AddUser = () => {
                 colorPalette="gray"
                 disabled={isSubmitting}
               >
-                Cancel
+                {t("CANCEL")}
               </Button>
             </DialogActionTrigger>
             <Button
@@ -217,7 +219,7 @@ const AddUser = () => {
               disabled={!isValid}
               loading={isSubmitting}
             >
-              Save
+              {t("SAVE")}
             </Button>
           </DialogFooter>
         </form>

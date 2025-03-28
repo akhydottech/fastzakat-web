@@ -13,7 +13,7 @@ import {
   PaginationPrevTrigger,
   PaginationRoot,
 } from "@/components/ui/pagination.tsx"
-
+import { useTranslation } from "react-i18next"
 const usersSearchSchema = z.object({
   page: z.number().catch(1),
 })
@@ -34,6 +34,7 @@ export const Route = createFileRoute("/_layout/admin")({
 })
 
 function UsersTable() {
+  const { t } = useTranslation()
   const queryClient = useQueryClient()
   const currentUser = queryClient.getQueryData<UserPublic>(["currentUser"])
   const navigate = useNavigate({ from: Route.fullPath })
@@ -61,11 +62,11 @@ function UsersTable() {
       <Table.Root size={{ base: "sm", md: "md" }}>
         <Table.Header>
           <Table.Row>
-            <Table.ColumnHeader w="sm">Full name</Table.ColumnHeader>
-            <Table.ColumnHeader w="sm">Email</Table.ColumnHeader>
-            <Table.ColumnHeader w="sm">Role</Table.ColumnHeader>
-            <Table.ColumnHeader w="sm">Status</Table.ColumnHeader>
-            <Table.ColumnHeader w="sm">Actions</Table.ColumnHeader>
+            <Table.ColumnHeader w="sm">{t("FULL_NAME")}</Table.ColumnHeader>
+            <Table.ColumnHeader w="sm">{t("EMAIL")}</Table.ColumnHeader>
+            <Table.ColumnHeader w="sm">{t("ROLE")}</Table.ColumnHeader>
+            <Table.ColumnHeader w="sm">{t("STATUS")}</Table.ColumnHeader>
+            <Table.ColumnHeader w="sm">{t("ACTIONS")}</Table.ColumnHeader>
           </Table.Row>
         </Table.Header>
         <Table.Body>
@@ -75,7 +76,7 @@ function UsersTable() {
                 {user.full_name || "N/A"}
                 {currentUser?.id === user.id && (
                   <Badge ml="1" colorScheme="teal">
-                    You
+                    {t("YOU")}
                   </Badge>
                 )}
               </Table.Cell>
@@ -83,9 +84,9 @@ function UsersTable() {
                 {user.email}
               </Table.Cell>
               <Table.Cell>
-                {user.is_superuser ? "Superuser" : "User"}
+                {user.is_superuser ? t("SUPERUSER") : t("USER")}
               </Table.Cell>
-              <Table.Cell>{user.is_active ? "Active" : "Inactive"}</Table.Cell>
+              <Table.Cell>{user.is_active ? t("ACTIVE") : t("INACTIVE")}</Table.Cell>
               <Table.Cell>
                 <UserActionsMenu
                   user={user}
@@ -114,12 +115,12 @@ function UsersTable() {
 }
 
 function Admin() {
+  const { t } = useTranslation()
   return (
     <Container maxW="full">
       <Heading size="lg" pt={12}>
-        Users Management
+        {t("USERS_MANAGEMENT")}
       </Heading>
-
       <AddUser />
       <UsersTable />
     </Container>

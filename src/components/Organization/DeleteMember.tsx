@@ -4,7 +4,7 @@ import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { FiTrash2 } from "react-icons/fi"
 
-import { UsersService } from "@/client"
+import { OrganizationsService } from "@/client"
 import {
   DialogActionTrigger,
   DialogBody,
@@ -28,18 +28,18 @@ const DeleteUser = ({ id }: { id: string }) => {
     formState: { isSubmitting },
   } = useForm()
 
-  const deleteUser = async (id: string) => {
-    await UsersService.deleteUser({ userId: id })
+  const deleteMember = async (id: string) => {
+    await OrganizationsService.deleteMember({ memberId: id })
   }
 
   const mutation = useMutation({
-    mutationFn: deleteUser,
+    mutationFn: deleteMember,
     onSuccess: () => {
-      showSuccessToast(t("USER_DELETED_SUCCESSFULLY"))
+      showSuccessToast(t("MEMBER_DELETED_SUCCESSFULLY"))
       setIsOpen(false)
     },
     onError: () => {
-      showErrorToast(t("USER_DELETION_ERROR"))
+      showErrorToast(t("MEMBER_DELETION_ERROR"))
     },
     onSettled: () => {
       queryClient.invalidateQueries()
@@ -61,17 +61,17 @@ const DeleteUser = ({ id }: { id: string }) => {
       <DialogTrigger asChild>
         <Button variant="ghost" size="sm" colorPalette="red">
           <FiTrash2 fontSize="16px" />
-          {t("DELETE_USER")}
+          {t("DELETE_MEMBER")}
         </Button>
       </DialogTrigger>
       <DialogContent>
         <form onSubmit={handleSubmit(onSubmit)}>
           <DialogHeader>
-            <DialogTitle>{t("DELETE_USER")}</DialogTitle>
+            <DialogTitle>{t("DELETE_MEMBER")}</DialogTitle>
           </DialogHeader>
           <DialogBody>
             <Text mb={4}>
-              {t("DELETE_USER_CONFIRMATION")}
+              {t("DELETE_MEMBER_CONFIRMATION")}
             </Text>
           </DialogBody>
 
