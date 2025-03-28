@@ -55,6 +55,7 @@ export type DropOffPointCreate = {
     latitude?: (number | null);
     longitude?: (number | null);
     responsible_id?: (string | null);
+    is_done?: (boolean | null);
 };
 
 export type DropOffPointPublic = {
@@ -64,6 +65,7 @@ export type DropOffPointPublic = {
     latitude?: (number | null);
     longitude?: (number | null);
     responsible_id?: (string | null);
+    is_done?: (boolean | null);
     id: string;
     owner_id: string;
     owner_full_name?: (string | null);
@@ -81,6 +83,7 @@ export type DropOffPointUpdate = {
     latitude?: (number | null);
     longitude?: (number | null);
     responsible_id?: (string | null);
+    is_done?: (boolean | null);
 };
 
 export type HTTPValidationError = {
@@ -231,6 +234,13 @@ export type DropOffPointsDeleteDropOffPointData = {
 
 export type DropOffPointsDeleteDropOffPointResponse = (Message);
 
+export type DropOffPointsSetDropOffPointDoneData = {
+    id: string;
+    isDone: boolean;
+};
+
+export type DropOffPointsSetDropOffPointDoneResponse = (Message);
+
 export type LoginLoginAccessTokenData = {
     formData: Body_login_login_access_token;
 };
@@ -275,7 +285,7 @@ export type OrganizationsInviteUserToOrganizationData = {
     email: string;
 };
 
-export type OrganizationsInviteUserToOrganizationResponse = (boolean);
+export type OrganizationsInviteUserToOrganizationResponse = (MemberInfo);
 
 export type OrganizationsGetMembersResponse = (MembersResponse);
 

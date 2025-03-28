@@ -9,6 +9,27 @@ import { LatLngExpression } from "leaflet"
 import { useEffect } from "react"
 import DeleteDropOffPoint from "../drop-off-points/DeleteDropOffPoint"
 import EditDropOffPoint from "../drop-off-points/EditDropOffPoint"
+import ToggleStatusDropOffPoint from "../drop-off-points/ToggleStatusDropOffPoint"
+
+// Create custom icons for markers
+const markerIcons = {
+  blue: L.icon({
+    iconUrl: "/assets/images/map_marker_blue.png",
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    shadowUrl: "/assets/images/marker-shadow.png",
+    shadowSize: [41, 41]
+  }),
+  green: L.icon({
+    iconUrl: "/assets/images/map_marker_green.png",
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    shadowUrl: "/assets/images/marker-shadow.png",
+    shadowSize: [41, 41]
+  })
+};
 
 // Fix for default marker icons
 delete (L.Icon.Default.prototype as any)._getIconUrl
@@ -99,7 +120,8 @@ const Map = ({ height = "400px", width = "100%" }: MapProps) => {
         {validMarkers.map((point) => (
           <Marker
             key={point.id}
-            position={[point.latitude, point.longitude]}
+            position={[point.latitude!, point.longitude!] as LatLngExpression}
+            icon={point.is_done ? markerIcons.green : markerIcons.blue}
           >
             <Popup>
               <div>
@@ -114,6 +136,7 @@ const Map = ({ height = "400px", width = "100%" }: MapProps) => {
                     </>
                   )
                 }
+                <ToggleStatusDropOffPoint item={point} />
               </div>
             </Popup>
           </Marker>

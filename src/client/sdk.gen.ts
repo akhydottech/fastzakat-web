@@ -3,7 +3,7 @@
 import type { CancelablePromise } from './core/CancelablePromise';
 import { OpenAPI } from './core/OpenAPI';
 import { request as __request } from './core/request';
-import type { AddressSearchAddressData, AddressSearchAddressResponse, DropOffPointsReadDropOffPointsData, DropOffPointsReadDropOffPointsResponse, DropOffPointsCreateDropOffPointData, DropOffPointsCreateDropOffPointResponse, DropOffPointsReadDropOffPointData, DropOffPointsReadDropOffPointResponse, DropOffPointsUpdateDropOffPointData, DropOffPointsUpdateDropOffPointResponse, DropOffPointsDeleteDropOffPointData, DropOffPointsDeleteDropOffPointResponse, LoginLoginAccessTokenData, LoginLoginAccessTokenResponse, LoginTestTokenResponse, LoginRecoverPasswordData, LoginRecoverPasswordResponse, LoginResetPasswordData, LoginResetPasswordResponse, LoginRecoverPasswordHtmlContentData, LoginRecoverPasswordHtmlContentResponse, MembersGetOrganizationsResponse, MembersAcceptInvitationData, MembersAcceptInvitationResponse, MembersDeleteOrganizationData, MembersDeleteOrganizationResponse, OrganizationsInviteUserToOrganizationData, OrganizationsInviteUserToOrganizationResponse, OrganizationsGetMembersResponse, OrganizationsDeleteMemberData, OrganizationsDeleteMemberResponse, PrivateCreateUserData, PrivateCreateUserResponse, UsersReadUsersData, UsersReadUsersResponse, UsersCreateUserData, UsersCreateUserResponse, UsersReadUserMeResponse, UsersDeleteUserMeResponse, UsersUpdateUserMeData, UsersUpdateUserMeResponse, UsersUpdatePasswordMeData, UsersUpdatePasswordMeResponse, UsersRegisterUserData, UsersRegisterUserResponse, UsersReadUserByIdData, UsersReadUserByIdResponse, UsersUpdateUserData, UsersUpdateUserResponse, UsersDeleteUserData, UsersDeleteUserResponse, UtilsTestEmailData, UtilsTestEmailResponse, UtilsHealthCheckResponse } from './types.gen';
+import type { AddressSearchAddressData, AddressSearchAddressResponse, DropOffPointsReadDropOffPointsData, DropOffPointsReadDropOffPointsResponse, DropOffPointsCreateDropOffPointData, DropOffPointsCreateDropOffPointResponse, DropOffPointsReadDropOffPointData, DropOffPointsReadDropOffPointResponse, DropOffPointsUpdateDropOffPointData, DropOffPointsUpdateDropOffPointResponse, DropOffPointsDeleteDropOffPointData, DropOffPointsDeleteDropOffPointResponse, DropOffPointsSetDropOffPointDoneData, DropOffPointsSetDropOffPointDoneResponse, LoginLoginAccessTokenData, LoginLoginAccessTokenResponse, LoginTestTokenResponse, LoginRecoverPasswordData, LoginRecoverPasswordResponse, LoginResetPasswordData, LoginResetPasswordResponse, LoginRecoverPasswordHtmlContentData, LoginRecoverPasswordHtmlContentResponse, MembersGetOrganizationsResponse, MembersAcceptInvitationData, MembersAcceptInvitationResponse, MembersDeleteOrganizationData, MembersDeleteOrganizationResponse, OrganizationsInviteUserToOrganizationData, OrganizationsInviteUserToOrganizationResponse, OrganizationsGetMembersResponse, OrganizationsDeleteMemberData, OrganizationsDeleteMemberResponse, PrivateCreateUserData, PrivateCreateUserResponse, UsersReadUsersData, UsersReadUsersResponse, UsersCreateUserData, UsersCreateUserResponse, UsersReadUserMeResponse, UsersDeleteUserMeResponse, UsersUpdateUserMeData, UsersUpdateUserMeResponse, UsersUpdatePasswordMeData, UsersUpdatePasswordMeResponse, UsersRegisterUserData, UsersRegisterUserResponse, UsersReadUserByIdData, UsersReadUserByIdResponse, UsersUpdateUserData, UsersUpdateUserResponse, UsersDeleteUserData, UsersDeleteUserResponse, UtilsTestEmailData, UtilsTestEmailResponse, UtilsHealthCheckResponse } from './types.gen';
 
 export class AddressService {
     /**
@@ -133,6 +133,31 @@ export class DropOffPointsService {
             url: '/api/v1/drop-off-points/{id}',
             path: {
                 id: data.id
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Set Drop Off Point Done
+     * Set a drop off point as done.
+     * @param data The data for the request.
+     * @param data.id
+     * @param data.isDone
+     * @returns Message Successful Response
+     * @throws ApiError
+     */
+    public static setDropOffPointDone(data: DropOffPointsSetDropOffPointDoneData): CancelablePromise<DropOffPointsSetDropOffPointDoneResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/v1/drop-off-points/{id}/done',
+            path: {
+                id: data.id
+            },
+            query: {
+                is_done: data.isDone
             },
             errors: {
                 422: 'Validation Error'
@@ -304,7 +329,7 @@ export class OrganizationsService {
      * Send an invitation to a user to join the organization.
      * @param data The data for the request.
      * @param data.email
-     * @returns boolean Successful Response
+     * @returns MemberInfo Successful Response
      * @throws ApiError
      */
     public static inviteUserToOrganization(data: OrganizationsInviteUserToOrganizationData): CancelablePromise<OrganizationsInviteUserToOrganizationResponse> {
