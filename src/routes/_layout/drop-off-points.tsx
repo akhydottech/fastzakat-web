@@ -6,12 +6,11 @@ import {
   VStack,
 } from "@chakra-ui/react"
 import { useQuery } from "@tanstack/react-query"
-import { useQueryClient } from "@tanstack/react-query"
 import { createFileRoute } from "@tanstack/react-router"
 import { FiSearch } from "react-icons/fi"
 import { z } from "zod"
 
-import { DropOffPointsService, UserPublic } from "@/client"
+import { DropOffPointsService } from "@/client"
 import { ItemActionsMenu } from "@/components/Common/ItemActionsMenu"
 import Map from "@/components/Common/Map"
 import AddDropOffPoint from "@/components/drop-off-points/AddDropOffPoint"
@@ -36,8 +35,6 @@ export const Route = createFileRoute("/_layout/drop-off-points")({
 })
 
 function ItemsTable() {
-  const queryClient = useQueryClient()
-  const currentUser = queryClient.getQueryData<UserPublic>(["currentUser"])
 
 
   const { data, isLoading, isPlaceholderData } = useQuery({
@@ -79,6 +76,7 @@ function ItemsTable() {
             <Table.ColumnHeader w="sm">Title</Table.ColumnHeader>
             <Table.ColumnHeader w="sm">Description</Table.ColumnHeader>
             <Table.ColumnHeader w="sm">Address</Table.ColumnHeader>
+            <Table.ColumnHeader w="sm">Done</Table.ColumnHeader>
             <Table.ColumnHeader w="sm">Actions</Table.ColumnHeader>
           </Table.Row>
         </Table.Header>
@@ -119,11 +117,11 @@ function ItemsTable() {
               </Table.Cell>
 
               <Table.Cell>
-                {
-                  currentUser?.id === item.owner_id && (
-                    <ItemActionsMenu item={item} />
-                  )
-                }
+                {item.is_done ? "Yes" : "No"}
+              </Table.Cell>
+
+              <Table.Cell>
+                 <ItemActionsMenu item={item} />
               </Table.Cell>
             </Table.Row>
           ))}
