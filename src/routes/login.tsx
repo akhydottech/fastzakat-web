@@ -15,6 +15,8 @@ import { PasswordInput } from "@/components/ui/password-input"
 import useAuth, { isLoggedIn } from "@/hooks/useAuth"
 import Logo from "/assets/images/fastapi-logo.svg"
 import { emailPattern, passwordRules } from "../utils"
+import { useTranslation } from "react-i18next";
+
 
 export const Route = createFileRoute("/login")({
   component: Login,
@@ -28,6 +30,7 @@ export const Route = createFileRoute("/login")({
 })
 
 function Login() {
+  const { t } = useTranslation();
   const { loginMutation, error, resetError } = useAuth()
   const {
     register,
@@ -81,10 +84,10 @@ function Login() {
             <Input
               id="username"
               {...register("username", {
-                required: "Username is required",
+                required: t("USERNAME_REQUIRED"),
                 pattern: emailPattern,
               })}
-              placeholder="Email"
+              placeholder={t("EMAIL")}
               type="email"
             />
           </InputGroup>
@@ -92,20 +95,20 @@ function Login() {
         <PasswordInput
           type="password"
           startElement={<FiLock />}
-          {...register("password", passwordRules())}
-          placeholder="Password"
+          {...register("password", passwordRules(true, t))}
+          placeholder={t("PASSWORD")}
           errors={errors}
         />
         <RouterLink to="/recover-password" className="main-link">
-          Forgot Password?
+          {t("FORGET_PASSWORD")}
         </RouterLink>
         <Button variant="solid" type="submit" loading={isSubmitting} size="md">
-          Log In
+          {t("LOGIN")}
         </Button>
         <Text>
-          Don't have an account?{" "}
+          {t("DONT_HAVE_ACCOUNT")}{" "}
           <RouterLink to="/signup" className="main-link">
-            Sign Up
+            {t("SIGN_UP")}
           </RouterLink>
         </Text>
       </Container>

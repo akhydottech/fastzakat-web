@@ -1,7 +1,9 @@
 import { Button, Center, Flex, Text } from "@chakra-ui/react"
 import { Link } from "@tanstack/react-router"
+import { useTranslation } from "react-i18next"
 
 const NotFound = () => {
+  const { t } = useTranslation()
   return (
     <>
       <Flex
@@ -35,7 +37,7 @@ const NotFound = () => {
           textAlign="center"
           zIndex={1}
         >
-          The page you are looking for was not found.
+          {t("PAGE_NOT_FOUND")}
         </Text>
         <Center zIndex={1}>
           <Link to="/">
@@ -45,7 +47,7 @@ const NotFound = () => {
               mt={4}
               alignSelf="center"
             >
-              Go Back
+              {t("GO_BACK")}
             </Button>
           </Link>
         </Center>

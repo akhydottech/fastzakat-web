@@ -2,6 +2,8 @@ import { useState, useCallback } from "react"
 import { Box, Input, InputProps } from "@chakra-ui/react"
 import { useBounce } from "@/hooks/useBounce"
 import { AddressService } from "@/client"
+import { useTranslation } from "react-i18next"
+import { useColorModeValue } from "@/components/ui/color-mode"
 
 interface AddressSuggestion {
   label: string
@@ -22,8 +24,12 @@ const AddressInputAutocomplete = ({
   placeholder = "Address",
   ...props
 }: InputAutocompleteProps) => {
+  const { t } = useTranslation()
   const [addressSuggestions, setAddressSuggestions] = useState<AddressSuggestion[]>([])
   const [showSuggestions, setShowSuggestions] = useState(false)
+  
+  const bgColor = useColorModeValue("white", "gray.700")
+  const hoverBgColor = useColorModeValue("gray.100", "gray.600")
 
   const fetchAddressSuggestions = useCallback(async (query: string) => {
     if (!query || query.length < 3) {
@@ -58,7 +64,7 @@ const AddressInputAutocomplete = ({
       <Input
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        placeholder={placeholder}
+        placeholder={t(placeholder)}
         type="text"
         onFocus={() => setShowSuggestions(true)}
         onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
@@ -71,7 +77,7 @@ const AddressInputAutocomplete = ({
           top="100%"
           left="0"
           right="0"
-          bg="white"
+          bg={bgColor}
           boxShadow="md"
           borderRadius="md"
           maxH="200px"
@@ -83,7 +89,7 @@ const AddressInputAutocomplete = ({
               key={index}
               p={2}
               cursor="pointer"
-              _hover={{ bg: "gray.100" }}
+              _hover={{ bg: hoverBgColor }}
               onClick={() => handleAddressSelect(suggestion)}
             >
               {suggestion.label}
