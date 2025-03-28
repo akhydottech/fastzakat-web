@@ -50,7 +50,7 @@ const ActivateMembership = ({ invitationId }: { invitationId: string }) => {
       handleError(err)
     },
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["organization-members"] })
+      queryClient.invalidateQueries()
     },
   })
 

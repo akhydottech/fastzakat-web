@@ -1,8 +1,8 @@
-import { Badge, Container, Heading, Table } from "@chakra-ui/react"
-import { useQuery, useQueryClient } from "@tanstack/react-query"
+import { Container, Heading, Table } from "@chakra-ui/react"
+import { useQuery } from "@tanstack/react-query"
 import { createFileRoute } from "@tanstack/react-router"
 
-import { MembersService, UserPublic } from "@/client"
+import { MembersService } from "@/client"
 import ActivateMembership from "@/components/Member/ActivateMembership"
 import DeleteOrganization from "@/components/Member/RemoveMembership"
 import PendingUsers from "@/components/Pending/PendingUsers"
@@ -20,9 +20,6 @@ export const Route = createFileRoute("/_layout/organizations")({
 })
 
 function OrganizationsTable() {
-  const queryClient = useQueryClient()
-  const currentUser = queryClient.getQueryData<UserPublic>(["currentUser"])
-
   const { data, isLoading } = useQuery({
     ...getUsersQueryOptions(),
   })
@@ -50,11 +47,6 @@ function OrganizationsTable() {
             <Table.Row key={organization.id}>
               <Table.Cell color={!organization.organization_name ? "gray" : "inherit"}>
                 {organization.organization_name || "N/A"}
-                {currentUser?.id === organization.member_id && (
-                  <Badge ml="1" colorScheme="teal">
-                    You
-                  </Badge>
-                )}
               </Table.Cell>
               <Table.Cell truncate maxW="sm">
                 {organization.email}
