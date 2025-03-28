@@ -6,13 +6,15 @@ import {
   Text,
   Textarea,
   VStack,
+  Select,
+  createListCollection,
 } from "@chakra-ui/react"
-import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { useState, useEffect } from "react"
 import { type SubmitHandler, useForm } from "react-hook-form"
 import { FaExchangeAlt } from "react-icons/fa"
 
-import { type ApiError, type DropOffPointPublic, DropOffPointsService } from "@/client"
+import { type ApiError, type DropOffPointPublic, DropOffPointsService, OrganizationsService, UserPublic } from "@/client"
 import useCustomToast from "@/hooks/useCustomToast"
 import { handleError } from "@/utils"
 import {
@@ -36,11 +38,13 @@ interface DropOffPointUpdateForm {
   title: string
   description?: string
   address?: string
+  responsible_id?: string | null
 }
 
 const EditDropOffPoint = ({ item }: EditDropOffPointProps) => {
   const [isOpen, setIsOpen] = useState(false)
   const queryClient = useQueryClient()
+  const currentUser = queryClient.getQueryData<UserPublic>(["currentUser"])
   const { showSuccessToast } = useCustomToast()
   const {
     register,
@@ -56,6 +60,7 @@ const EditDropOffPoint = ({ item }: EditDropOffPointProps) => {
       ...item,
       description: item.description ?? undefined,
       address: item.address ?? undefined,
+      responsible_id: item.responsible_id ?? null,
     },
   })
 
@@ -64,10 +69,12 @@ const EditDropOffPoint = ({ item }: EditDropOffPointProps) => {
       ...item,
       description: item.description ?? undefined,
       address: item.address ?? undefined,
+      responsible_id: item.responsible_id ?? null,
     })
   }, [item, reset])
 
   const address = watch("address")
+  const responsibleId = watch("responsible_id")
 
   const mutation = useMutation({
     mutationFn: (data: DropOffPointUpdateForm) =>
@@ -81,12 +88,29 @@ const EditDropOffPoint = ({ item }: EditDropOffPointProps) => {
       handleError(err)
     },
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["items"] })
+      queryClient.invalidateQueries({ queryKey: ["drop-off-points"] })
     },
   })
 
   const onSubmit: SubmitHandler<DropOffPointUpdateForm> = async (data) => {
     mutation.mutate(data)
+  }
+
+  let membersCollection;
+
+  if (currentUser?.is_organization) {
+    const { data: members } = useQuery({
+      queryKey: ["members"],
+      queryFn: () => OrganizationsService.getMembers(),
+    });
+
+    membersCollection = createListCollection({
+      items:
+        members?.data?.map((member) => ({
+          label: member.full_name || member.email,
+          value: member.id,
+        })) || [],
+    });
   }
 
   return (
@@ -150,6 +174,43 @@ const EditDropOffPoint = ({ item }: EditDropOffPointProps) => {
                   placeholder="Address"
                 />
               </Field>
+
+              {currentUser?.is_organization && membersCollection && (
+                <Field
+                  invalid={!!errors.responsible_id}
+                  errorText={errors.responsible_id?.message}
+                  label="Responsible"
+                >
+                  <Select.Root
+                    collection={membersCollection}
+                    value={responsibleId ? [responsibleId] : []}
+                    onValueChange={({ value }) =>
+                      setValue("responsible_id", value[0] || null)
+                    }
+                  >
+                    <Select.Control>
+                      <Select.Trigger>
+                        <Select.ValueText placeholder="Select responsible" />
+                      </Select.Trigger>
+                    </Select.Control>
+                    <Select.Positioner>
+                      <Select.Content>
+                        <Select.Item
+                          key="none"
+                          item={{ value: "", label: "None" }}
+                        >
+                          None
+                        </Select.Item>
+                        {membersCollection?.items.map((member) => (
+                          <Select.Item key={member.value} item={member}>
+                            {member.label}
+                          </Select.Item>
+                        ))}
+                      </Select.Content>
+                    </Select.Positioner>
+                  </Select.Root>
+                </Field>
+              )}
             </VStack>
           </DialogBody>
 

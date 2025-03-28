@@ -40,7 +40,7 @@ const DeleteDropOffPoint = ({ id }: { id: string }) => {
       showErrorToast("An error occurred while deleting the drop off point")
     },
     onSettled: () => {
-      queryClient.invalidateQueries()
+      queryClient.invalidateQueries({ queryKey: ["drop-off-points"] })
     },
   })
 

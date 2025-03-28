@@ -54,6 +54,7 @@ export type DropOffPointCreate = {
     address?: (string | null);
     latitude?: (number | null);
     longitude?: (number | null);
+    responsible_id?: (string | null);
 };
 
 export type DropOffPointPublic = {
@@ -62,6 +63,7 @@ export type DropOffPointPublic = {
     address?: (string | null);
     latitude?: (number | null);
     longitude?: (number | null);
+    responsible_id?: (string | null);
     id: string;
     owner_id: string;
     owner_full_name?: (string | null);
@@ -78,6 +80,7 @@ export type DropOffPointUpdate = {
     address?: (string | null);
     latitude?: (number | null);
     longitude?: (number | null);
+    responsible_id?: (string | null);
 };
 
 export type HTTPValidationError = {
