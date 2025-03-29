@@ -58,7 +58,7 @@ function UsersTable() {
   }
 
   return (
-    <>
+    <div style={{overflow: "scroll"}}>
       <Table.Root size={{ base: "sm", md: "md" }}>
         <Table.Header>
           <Table.Row>
@@ -110,7 +110,7 @@ function UsersTable() {
           </Flex>
         </PaginationRoot>
       </Flex>
-    </>
+    </div>
   )
 }
 
