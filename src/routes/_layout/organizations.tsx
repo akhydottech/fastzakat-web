@@ -34,7 +34,7 @@ function OrganizationsTable() {
   }
 
   return (
-    <>
+    <div style={{overflow: "scroll"}}>
       <Table.Root size={{ base: "sm", md: "md" }}>
         <Table.Header>
           <Table.Row>
@@ -64,7 +64,7 @@ function OrganizationsTable() {
           ))}
         </Table.Body>
       </Table.Root>
-    </>
+    </div>
   )
 }
 
