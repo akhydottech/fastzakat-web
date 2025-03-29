@@ -8,6 +8,10 @@ const useCustomToast = () => {
       title: "Success!",
       description,
       type: "success",
+      action: {
+        label: "Close",
+        onClick: () => console.log("Close"),
+      }
     })
   }
 
@@ -16,6 +20,10 @@ const useCustomToast = () => {
       title: "Something went wrong!",
       description,
       type: "error",
+      action: {
+        label: "Close",
+        onClick: () => console.log("Close"),
+      }
     })
   }
 
